@@ -42,7 +42,36 @@ const signup = async (data) => {
     email: user.email,
   };
 };
+//veryfy otp
+const verifyOtp = async ({ email, otp }) => {
+  const otpDoc = await Otp.findOne({
+    email,
+    otp,
+    purpose: "verify-email",
+  });
 
+  if (!otpDoc) {
+    throw new ApiError(400, "Invalid or expired OTP");
+  }
+
+  await User.updateOne(
+    { email },
+    {
+      isVerified: true,
+    }
+  );
+
+  await Otp.deleteMany({
+    email,
+    purpose: "verify-email",
+  });
+
+  return {
+    email,
+  };
+};
 module.exports = {
   signup,
+  verifyOtp,
+
 };

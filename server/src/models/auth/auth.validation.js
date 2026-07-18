@@ -10,7 +10,7 @@ const signupSchema = Joi.object({
   semester: Joi.number().integer().min(1).max(8).required(),
 
   rollNumber: Joi.string().allow("").optional(),
-  
+
   phone: Joi.string().allow("").optional(),
 });
 
@@ -20,12 +20,14 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+ 
 const verifyOtpSchema = Joi.object({
   email: Joi.string().email().required(),
 
-  otp: Joi.string().length(6).required(),
+  otp: Joi.string()
+    .length(6)
+    .required(),
 });
-
 module.exports = {
   signupSchema,
   loginSchema,

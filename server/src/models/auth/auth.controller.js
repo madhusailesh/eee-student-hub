@@ -17,7 +17,18 @@ const signupController = asyncHandler(async (req, res) => {
     )
   );
 });
+const verifyOtpController = asyncHandler(async (req, res) => {
+  const result = await verifyOtp(req.body);
 
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      result,
+      "Email verified successfully"
+    )
+  );
+});
 module.exports = {
   signupController,
+  verifyOtpController,
 };
