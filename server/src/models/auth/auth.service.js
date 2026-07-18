@@ -44,6 +44,8 @@ const signup = async (data) => {
 };
 //veryfy otp
 const verifyOtp = async ({ email, otp }) => {
+  console.log("Email:", email);
+  console.log("OTP:", otp);
   const otpDoc = await Otp.findOne({
     email,
     otp,
@@ -70,8 +72,45 @@ const verifyOtp = async ({ email, otp }) => {
     email,
   };
 };
+
+
+const bcrypt = require("bcryptjs");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../../services/jwt.service");
+
+const login = async ({ email, password }) => {
+  const user = await User.findOne({ email }).select("+password +refreshToken");
+
+  if (!user) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  if (!user.isVerified) {
+    throw new ApiError(403, "Please verify your email first");
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
+
+  user.refreshToken = refreshToken;
+  await user.save();
+
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
+};
 module.exports = {
   signup,
   verifyOtp,
-
+  login,
 };

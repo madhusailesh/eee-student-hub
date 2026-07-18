@@ -1,7 +1,10 @@
 const asyncHandler = require("../../utils/asyncHandler");
 const ApiResponse = require("../../utils/ApiResponse");
-
-const { signup } = require("./auth.service");
+const {
+  signup,
+  verifyOtp,
+  login,
+} = require("./auth.service");
 
 const signupController = asyncHandler(async (req, res) => {
   const user = await signup(req.body);
@@ -28,7 +31,40 @@ const verifyOtpController = asyncHandler(async (req, res) => {
     )
   );
 });
+
+const loginController = asyncHandler(async (req, res) => {
+  const { user, accessToken, refreshToken } = await login(req.body);
+
+  return res
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    })
+    .cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          id: user._id,
+          fullName: user.fullName,
+          email: user.email,
+          role: user.role,
+          accessToken, // Mobile apps ke liye useful
+        },
+        "Login successful"
+      )
+    );
+});
 module.exports = {
   signupController,
   verifyOtpController,
+  loginController,
 };

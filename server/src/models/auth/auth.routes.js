@@ -2,14 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 
-const validate = require("../../middleware/validate.middleware");
-
+const validate = require("../../middleware/validate.middleware"); 
 const {
-  signupSchema,
-} = require("./auth.validation");
-
+  signupSchema,  verifyOtpSchema,
+  loginSchema,
+} = require("./auth.validation"); 
 const {
   signupController,
+  verifyOtpController,
+  loginController,
 } = require("./auth.controller");
 
 router.post(
@@ -21,5 +22,12 @@ router.post(
   "/verify-otp",
   validate(verifyOtpSchema),
   verifyOtpController
+);
+ 
+
+router.post(
+  "/login",
+  validate(loginSchema),
+  loginController
 );
 module.exports = router;

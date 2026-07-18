@@ -6,7 +6,8 @@ const errorHandler = require("./middleware/error.middleware");
 
 
 const app = express();
-
+ 
+ 
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
