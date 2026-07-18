@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -6,8 +7,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      minlength: 3,
-      maxlength: 100,
     },
 
     email: {
@@ -21,36 +20,18 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6,
       select: false,
     },
 
     semester: {
       type: Number,
       required: true,
-      enum: [1, 2, 3, 4, 5, 6, 7, 8],
-    },
-
-    rollNumber: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-
-    phone: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-
-    profileImage: {
-      type: String,
-      default: "",
+      enum: [1,2,3,4,5,6,7,8],
     },
 
     role: {
       type: String,
-      enum: ["student", "admin"],
+      enum: ["student","admin"],
       default: "student",
     },
 
@@ -69,5 +50,18 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+// Compare password
+userSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
 
 module.exports = mongoose.model("User", userSchema);

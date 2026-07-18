@@ -1,22 +1,15 @@
 const express = require("express");
 
 const router = express.Router();
+const authRoutes = require("../models/auth/auth.routes");
 
-const validate = require("../../middleware/validate.middleware");
+router.use("/auth", authRoutes);
+
 router.get("/health", (req, res) => {
-  res.status(200).json({
+  res.json({
     success: true,
-    message: "API is healthy 🚀",
-    version: "v1",
+    message: "API is healthy",
   });
 });
-const {
-  signupSchema,
-} = require("./auth.validation");
 
-router.post(
-  "/signup",
-  validate(signupSchema),
-  signup
-);
 module.exports = router;
