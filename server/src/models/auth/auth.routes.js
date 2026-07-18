@@ -17,5 +17,9 @@ router.post(
   validate(signupSchema),
   signupController
 );
-
+router.post(
+  "/verify-otp",
+  validate(verifyOtpSchema),
+  verifyOtpController
+);
 module.exports = router;
