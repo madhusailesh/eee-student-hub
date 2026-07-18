@@ -3,6 +3,8 @@ const express = require("express");
 const router = express.Router();
 
 const validate = require("../../middleware/validate.middleware"); 
+const protect = require("../../middleware/auth.middleware");
+
 const {
   signupSchema,  verifyOtpSchema,
   loginSchema,
@@ -11,6 +13,7 @@ const {
   signupController,
   verifyOtpController,
   loginController,
+  getCurrentUserController,
 } = require("./auth.controller");
 
 router.post(
@@ -29,5 +32,10 @@ router.post(
   "/login",
   validate(loginSchema),
   loginController
+);
+router.get(
+  "/me",
+  protect,
+  getCurrentUserController
 );
 module.exports = router;

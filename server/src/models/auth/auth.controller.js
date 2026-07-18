@@ -1,11 +1,12 @@
 const asyncHandler = require("../../utils/asyncHandler");
 const ApiResponse = require("../../utils/ApiResponse");
+ 
 const {
   signup,
   verifyOtp,
   login,
+  getCurrentUser,
 } = require("./auth.service");
-
 const signupController = asyncHandler(async (req, res) => {
   const user = await signup(req.body);
 
@@ -63,8 +64,21 @@ const loginController = asyncHandler(async (req, res) => {
       )
     );
 });
+
+const getCurrentUserController = asyncHandler(async (req, res) => {
+  const user = await getCurrentUser(req.user._id);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      user,
+      "Current user fetched successfully"
+    )
+  );
+});
 module.exports = {
   signupController,
   verifyOtpController,
   loginController,
+  getCurrentUserController,
 };

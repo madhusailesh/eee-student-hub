@@ -109,8 +109,20 @@ const login = async ({ email, password }) => {
     refreshToken,
   };
 };
+
+
+const getCurrentUser = async (userId) => {
+  const user = await User.findById(userId).select("-password -refreshToken");
+
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return user;
+};
 module.exports = {
   signup,
   verifyOtp,
   login,
+  getCurrentUser,
 };
