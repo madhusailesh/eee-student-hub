@@ -18,11 +18,23 @@ const create = asyncHandler(async (req, res) => {
     throw new ApiError(400, error.details[0].message);
   }
 
-  const note = await createNote(value, req.user._id);
+  if (!req.file) {
+    throw new ApiError(400, "PDF file is required");
+  }
+
+  const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+
+  const note = await createNote(
+    {
+      ...value,
+      fileUrl,
+    },
+    req.user._id
+  );
 
   res.status(201).json({
     success: true,
-    message: "Note created successfully",
+    message: "Note uploaded successfully",
     data: note,
   });
 });

@@ -11,7 +11,7 @@ const createNoteSchema = Joi.object({
 
   description: Joi.string().allow("").optional(),
 
-  fileUrl: Joi.string().uri().required(),
+  // fileUrl: Joi.string().uri().optional(),
 });
 
 module.exports = {

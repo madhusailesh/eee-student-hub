@@ -6,7 +6,12 @@ const errorHandler = require("./middleware/error.middleware");
 const notesRoutes = require("./models/notes/notes.routes");
 
 const app = express();
- 
+ const path = require("path");
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"))
+);
  
 app.use(
   cors({
