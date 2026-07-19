@@ -14,6 +14,7 @@ const {
   verifyOtpController,
   loginController,
   getCurrentUserController,
+  refreshTokenController,
 } = require("./auth.controller");
 
 router.post(
@@ -37,5 +38,10 @@ router.get(
   "/me",
   protect,
   getCurrentUserController
+);
+
+router.post(
+  "/refresh-token",
+  refreshTokenController
 );
 module.exports = router;

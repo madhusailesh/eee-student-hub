@@ -6,6 +6,7 @@ const {
   verifyOtp,
   login,
   getCurrentUser,
+  refreshAccessToken,
 } = require("./auth.service");
 const signupController = asyncHandler(async (req, res) => {
   const user = await signup(req.body);
@@ -76,9 +77,31 @@ const getCurrentUserController = asyncHandler(async (req, res) => {
     )
   );
 });
+const refreshTokenController = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  const accessToken = await refreshAccessToken(refreshToken);
+
+  return res
+    .cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    })
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { accessToken },
+        "Access token refreshed successfully"
+      )
+    );
+});
 module.exports = {
   signupController,
   verifyOtpController,
   loginController,
   getCurrentUserController,
+  refreshTokenController,
 };

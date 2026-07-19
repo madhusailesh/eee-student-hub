@@ -78,6 +78,7 @@ const bcrypt = require("bcryptjs");
 const {
   generateAccessToken,
   generateRefreshToken,
+  verifyRefreshToken,
 } = require("../../services/jwt.service");
 
 const login = async ({ email, password }) => {
@@ -120,9 +121,29 @@ const getCurrentUser = async (userId) => {
 
   return user;
 };
+const refreshAccessToken = async (refreshToken) => {
+  if (!refreshToken) {
+    throw new ApiError(401, "Refresh token missing");
+  }
+
+  const decoded = verifyRefreshToken(refreshToken);
+
+  const user = await User.findById(decoded.id).select("+refreshToken");
+
+  if (!user) {
+    throw new ApiError(401, "User not found");
+  }
+
+  if (user.refreshToken !== refreshToken) {
+    throw new ApiError(401, "Invalid refresh token");
+  }
+
+  return generateAccessToken(user);
+};
 module.exports = {
   signup,
   verifyOtp,
   login,
   getCurrentUser,
+  refreshAccessToken,
 };
