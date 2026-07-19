@@ -9,17 +9,17 @@ const {
 } = require("./notes.controller");
 
 const protect = require("../../middleware/auth.middleware");
-// We'll add admin middleware next
+const authorize = require("../../middleware/authorize.middleware");
 
 const router = express.Router();
 
-// Public / Protected
+// Student + Admin
 router.get("/", protect, getAll);
 router.get("/:id", protect, getOne);
 
-// Admin
-router.post("/", protect, create);
-router.put("/:id", protect, update);
-router.delete("/:id", protect, remove);
+// Admin only
+router.post("/", protect, authorize("admin"), create);
+router.put("/:id", protect, authorize("admin"), update);
+router.delete("/:id", protect, authorize("admin"), remove);
 
 module.exports = router;

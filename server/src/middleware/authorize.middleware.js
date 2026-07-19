@@ -2,6 +2,8 @@ const ApiError = require("../utils/ApiError");
 
 const authorize = (...roles) => {
   return (req, res, next) => {
+    console.log("Allowed Roles:", roles);
+    console.log("User Role:", req.user.role);
     if (!req.user) {
       return next(new ApiError(401, "Unauthorized"));
     }
