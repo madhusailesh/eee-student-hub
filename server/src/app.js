@@ -3,7 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 const errorHandler = require("./middleware/error.middleware");
-
+const notesRoutes = require("./models/notes/notes.routes");
 
 const app = express();
  
@@ -25,6 +25,6 @@ app.get("/", (req, res) => {
     message: "EEE Student Hub API Running 🚀",
   });
 }); 
- 
+ app.use("/api/v1/notes", notesRoutes);
 app.use(errorHandler);
 module.exports = app;

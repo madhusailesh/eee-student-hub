@@ -1,4 +1,4 @@
-const Note = require("./note.model");
+const Note = require("./notes.model");
 const ApiError = require("../../utils/ApiError");
 
 const createNote = async (data, userId) => {
