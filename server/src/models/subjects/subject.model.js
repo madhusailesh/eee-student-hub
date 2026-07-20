@@ -19,6 +19,7 @@ const subjectSchema = new mongoose.Schema(
     code: {
       type: String,
       required: true,
+      uppercase: true,
       trim: true,
     },
 
@@ -28,9 +29,16 @@ const subjectSchema = new mongoose.Schema(
       trim: true,
     },
 
+    type: {
+      type: String,
+      enum: ["THEORY", "LAB"],
+      default: "THEORY",
+    },
+
     credits: {
       type: Number,
       default: 0,
+      min: 0,
     },
 
     isActive: {
