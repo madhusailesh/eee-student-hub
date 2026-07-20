@@ -1,17 +1,12 @@
 const mongoose = require("mongoose");
 
-const noteSchema = new mongoose.Schema(
+const subjectSchema = new mongoose.Schema(
   {
-    title: {
+    branch: {
       type: String,
       required: true,
+      uppercase: true,
       trim: true,
-    },
-
-    subject: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subject",
-      required: true,
     },
 
     semester: {
@@ -21,30 +16,19 @@ const noteSchema = new mongoose.Schema(
       max: 8,
     },
 
-    branch: {
+    code: {
       type: String,
       required: true,
-      uppercase: true,
-    },
-
-    description: {
-      type: String,
-      default: "",
       trim: true,
     },
 
-    fileUrl: {
+    name: {
       type: String,
       required: true,
+      trim: true,
     },
 
-    uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-
-    downloads: {
+    credits: {
       type: Number,
       default: 0,
     },
@@ -56,7 +40,7 @@ const noteSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
-module.exports = mongoose.model("Note", noteSchema);
+module.exports = mongoose.model("Subject", subjectSchema);
