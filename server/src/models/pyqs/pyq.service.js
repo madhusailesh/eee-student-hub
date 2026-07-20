@@ -39,6 +39,7 @@ const getAllPyqs = async (filters) => {
   const total = await Pyq.countDocuments(query);
 
   const pyqs = await Pyq.find(query)
+  .populate("subject")
     .populate("uploadedBy", "fullName email")
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
@@ -54,10 +55,9 @@ const getAllPyqs = async (filters) => {
 };
 
 const getPyqById = async (id) => {
-  return await Pyq.findById(id).populate(
-    "uploadedBy",
-    "fullName email"
-  );
+  return await Pyq.findById(id)
+    .populate("subject")
+    .populate("uploadedBy", "fullName email");
 };
 
 const updatePyq = async (id, data) => {

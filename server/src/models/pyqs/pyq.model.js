@@ -8,11 +8,11 @@ const pyqSchema = new mongoose.Schema(
       trim: true,
     },
 
-    subject: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+   subject: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Subject",
+  required: true,
+},
 
     semester: {
       type: Number,

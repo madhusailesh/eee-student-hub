@@ -3,7 +3,7 @@ const Joi = require("joi");
 const createPyqSchema = Joi.object({
   title: Joi.string().trim().required(),
 
-  subject: Joi.string().trim().required(),
+  subject: Joi.string().required(),
 
   semester: Joi.number().integer().min(1).max(8).required(),
 

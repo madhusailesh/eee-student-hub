@@ -12,12 +12,14 @@ const createNote = async (data, userId) => {
 
 const getAllNotes = async () => {
   return await Note.find({ isActive: true })
+    .populate("subject")
     .populate("uploadedBy", "fullName email")
     .sort({ createdAt: -1 });
 };
 
 const getNoteById = async (noteId) => {
   const note = await Note.findById(noteId)
+    .populate("subject")
     .populate("uploadedBy", "fullName email");
 
   if (!note || !note.isActive) {
