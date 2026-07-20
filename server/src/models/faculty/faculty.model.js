@@ -9,11 +9,16 @@ const facultySchema = new mongoose.Schema(
     },
 
     designation: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
+  type: String,
+  enum: [
+    "HOD",
+    "Professor",
+    "Associate Professor",
+    "Assistant Professor",
+    "Guest Faculty"
+  ],
+  required: true,
+},
     email: {
       type: String,
       trim: true,
