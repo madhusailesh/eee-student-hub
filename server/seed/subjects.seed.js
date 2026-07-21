@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 
-const Subject = require("../src/models/subjects/subject.model");
+const Subject = require("../src/models/subject/subject.model");
 const subjects = require("./data/subjects");
 
 async function seedSubjects() {

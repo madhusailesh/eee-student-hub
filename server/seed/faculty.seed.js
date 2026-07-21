@@ -3,7 +3,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const Faculty = require("../src/models/faculty/faculty.model");
-const Subject = require("../src/models/subjects/subject.model");
+const Subject = require("../src/models/subject/subject.model");
 
 const facultyData = require("./data/faculty");
 
