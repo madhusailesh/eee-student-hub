@@ -3,15 +3,16 @@ const {
   createSubjectSchema,
 } = require("./subject.validation");
 
+ 
+
+const asyncHandler = require("../../utils/asyncHandler");
+const ApiError = require("../../utils/ApiError");
 const {
   createSubject,
   getAllSubjects,
   getSubjectById,
+  getSubjectByCode,
 } = require("./subject.service");
-
-const asyncHandler = require("../../utils/asyncHandler");
-const ApiError = require("../../utils/ApiError");
-
 const create = asyncHandler(async (req, res) => {
   const { error, value } = createSubjectSchema.validate(req.body);
 
@@ -48,9 +49,21 @@ const getOne = asyncHandler(async (req, res) => {
     data: subject,
   });
 });
+const getByCode = asyncHandler(async (req, res) => {
+  const subject = await getSubjectByCode(req.params.code);
 
+  if (!subject) {
+    throw new ApiError(404, "Subject not found");
+  }
+
+  res.status(200).json({
+    success: true,
+    data: subject,
+  });
+});
 module.exports = {
   create,
   getAll,
   getOne,
+  getByCode,
 };

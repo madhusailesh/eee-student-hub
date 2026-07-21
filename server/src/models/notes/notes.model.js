@@ -8,6 +8,11 @@ const noteSchema = new mongoose.Schema(
       trim: true,
     },
 
+    description: {
+      type: String,
+      default: "",
+    },
+
     subject: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subject",
@@ -17,20 +22,6 @@ const noteSchema = new mongoose.Schema(
     semester: {
       type: Number,
       required: true,
-      min: 1,
-      max: 8,
-    },
-
-    branch: {
-      type: String,
-      required: true,
-      uppercase: true,
-    },
-
-    description: {
-      type: String,
-      default: "",
-      trim: true,
     },
 
     fileUrl: {
@@ -41,10 +32,14 @@ const noteSchema = new mongoose.Schema(
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
 
     downloads: {
+      type: Number,
+      default: 0,
+    },
+
+    views: {
       type: Number,
       default: 0,
     },
@@ -56,7 +51,7 @@ const noteSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 module.exports = mongoose.model("Note", noteSchema);

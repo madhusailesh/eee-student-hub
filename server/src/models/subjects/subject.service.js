@@ -24,9 +24,21 @@ const getAllSubjects = async (filters) => {
 const getSubjectById = async (id) => {
   return await Subject.findById(id);
 };
+const getSubjectByCode = async (code) => {
+  console.log("Searching code:", code);
 
+  const subject = await Subject.findOne({
+    code: code.toUpperCase(),
+    isActive: true,
+  });
+
+  console.log("Found subject:", subject);
+
+  return subject;
+};
 module.exports = {
   createSubject,
   getAllSubjects,
   getSubjectById,
+  getSubjectByCode,
 };

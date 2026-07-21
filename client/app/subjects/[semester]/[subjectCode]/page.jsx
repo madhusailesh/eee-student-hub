@@ -47,6 +47,8 @@ const resources = [
 export default function SubjectDashboard() {
   const { semester, subjectCode } = useParams();
 
+  console.log(subjectCode); // ✅ yahan rakho
+
   return (
     <main className="max-w-7xl mx-auto px-6 py-10">
       <div className="mb-10">
