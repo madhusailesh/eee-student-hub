@@ -1,66 +1,84 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
+import {
+  FileText,
+  FileQuestion,
+  BookOpen,
+  Video,
+  ClipboardList,
+  FolderOpen,
+} from "lucide-react";
 
 const resources = [
   {
     title: "Notes",
-    icon: "📄",
     href: "notes",
+    icon: FileText,
   },
   {
     title: "PYQs",
-    icon: "📝",
     href: "pyqs",
+    icon: FileQuestion,
   },
   {
     title: "Books",
-    icon: "📚",
     href: "books",
+    icon: BookOpen,
   },
   {
     title: "Videos",
-    icon: "🎥",
     href: "videos",
+    icon: Video,
   },
   {
     title: "Syllabus",
-    icon: "📋",
     href: "syllabus",
+    icon: ClipboardList,
   },
   {
     title: "Assignments",
-    icon: "📂",
     href: "assignments",
+    icon: FolderOpen,
   },
 ];
 
-export default function SubjectPage() {
+export default function SubjectDashboard() {
   const { semester, subjectCode } = useParams();
 
   return (
-    <main className="max-w-7xl mx-auto p-8">
-      <h1 className="text-4xl font-bold">
-        {subjectCode}
-      </h1>
+    <main className="max-w-7xl mx-auto px-6 py-10">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold">{subjectCode}</h1>
 
-      <p className="text-gray-600 mt-2">
-        Semester {semester}
-      </p>
+        <p className="text-gray-500 mt-2">
+          Semester {semester}
+        </p>
+      </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-        {resources.map((item) => (
-          <div
-            key={item.href}
-            className="border rounded-xl p-6 shadow hover:shadow-lg cursor-pointer transition"
-          >
-            <div className="text-5xl">{item.icon}</div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {resources.map((item) => {
+          const Icon = item.icon;
 
-            <h2 className="text-2xl font-semibold mt-4">
-              {item.title}
-            </h2>
-          </div>
-        ))}
+          return (
+            <Link
+              key={item.href}
+              href={`/subjects/${semester}/${subjectCode}/${item.href}`}
+              className="rounded-2xl border p-6 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1"
+            >
+              <Icon size={42} />
+
+              <h2 className="mt-5 text-2xl font-semibold">
+                {item.title}
+              </h2>
+
+              <p className="mt-2 text-gray-500">
+                Open {item.title}
+              </p>
+            </Link>
+          );
+        })}
       </div>
     </main>
   );

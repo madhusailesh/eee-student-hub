@@ -10,10 +10,15 @@ const createNote = async (data, userId) => {
   return note;
 };
 
-const getAllNotes = async () => {
-  return await Note.find({ isActive: true })
-    .populate("subject")
-    .populate("uploadedBy", "fullName email")
+const getAllNotes = async (filters) => {
+  const query = {};
+
+  if (filters.subject) {
+    query.subject = filters.subject;
+  }
+
+  return await Note.find(query)
+    .populate("subject", "name code semester")
     .sort({ createdAt: -1 });
 };
 

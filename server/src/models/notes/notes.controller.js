@@ -39,10 +39,10 @@ const create = asyncHandler(async (req, res) => {
   });
 });
 
-const getAll = asyncHandler(async (req, res) => {
-  const notes = await getAllNotes();
+ const getAll = asyncHandler(async (req, res) => {
+  const notes = await noteService.getAllNotes(req.query);
 
-  res.status(200).json({
+  res.json({
     success: true,
     data: notes,
   });
