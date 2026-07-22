@@ -14,31 +14,13 @@ const upload = require("../../middleware/upload.middleware");
 
 const router = express.Router();
 
-// Public
+// ✅ Public
 router.get("/", getAll);
 router.get("/:id", getOne);
 
-// Admin only
-router.post(
-  "/",
-  protect,
-  authorize("admin"),
-  upload.single("file"),
-  create
-);
-
-router.put(
-  "/:id",
-  protect,
-  authorize("admin"),
-  update
-);
-
-router.delete(
-  "/:id",
-  protect,
-  authorize("admin"),
-  remove
-);
+// 🔒 Admin only
+router.post("/", protect, authorize("admin"), upload.single("file"), create);
+router.put("/:id", protect, authorize("admin"), update);
+router.delete("/:id", protect, authorize("admin"), remove);
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const Note = require("./notes.model");
+const Subject = require("../subjects/subject.model"); // <-- adjust path if needed
 const ApiError = require("../../utils/ApiError");
 
 const createNote = async (data, userId) => {
@@ -11,14 +12,32 @@ const createNote = async (data, userId) => {
 };
 
 const getAllNotes = async (filters) => {
-  const query = {};
+  const query = {
+    isActive: true,
+  };
 
+  // Filter using Subject ObjectId
   if (filters.subject) {
     query.subject = filters.subject;
   }
 
+  // Filter using Subject Code
+  if (filters.subjectCode) {
+    const subject = await Subject.findOne({
+      code: filters.subjectCode,
+      isActive: true,
+    });
+
+    if (!subject) {
+      return [];
+    }
+
+    query.subject = subject._id;
+  }
+
   return await Note.find(query)
     .populate("subject", "name code semester")
+    .populate("uploadedBy", "fullName")
     .sort({ createdAt: -1 });
 };
 

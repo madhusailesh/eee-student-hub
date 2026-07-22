@@ -66,7 +66,7 @@ export default function SubjectDashboard() {
           return (
             <Link
               key={item.href}
-              href={`/subjects/${semester}/${subjectCode}/${item.href}`}
+              href={`/semester/${semester}/${subjectCode}/${item.href}`}
               className="rounded-2xl border p-6 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1"
             >
               <Icon size={42} />
