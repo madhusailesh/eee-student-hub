@@ -9,19 +9,16 @@ export default function Dashboard() {
     return <h2>Loading...</h2>;
   }
 
-  if (!user) {
-    return <h2>Unauthorized</h2>;
-  }
+   
+return (
+  <div>
+    <h1>EEE Student Hub Dashboard</h1>
 
-  return (
-    <div className="p-10">
-      <h1 className="text-3xl font-bold">
-        Welcome {user.fullName}
-      </h1>
-
-      <p>{user.email}</p>
-
-      <p>Role : {user.role}</p>
-    </div>
-  );
+    {user ? (
+      <p>Welcome, {user.fullName}</p>
+    ) : (
+      <p>Welcome, Guest</p>
+    )}
+  </div>
+);
 }
