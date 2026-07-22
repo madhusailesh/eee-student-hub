@@ -6,9 +6,9 @@ const errorHandler = require("./middleware/error.middleware");
 const notesRoutes = require("./models/notes/notes.routes");
 const pyqRoutes = require("./models/pyqs/pyq.route");
 
+const resourceRoutes = require("./models/resource/resource.route");
 const app = express();
  const path = require("path");
-
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "../uploads"))
@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
   });
 }); 
  app.use("/api/v1/notes", notesRoutes);
- 
+ app.use("/api/v1/resources", resourceRoutes);
 app.use("/api/v1/pyqs", pyqRoutes);
 app.use(errorHandler);
 module.exports = app;
