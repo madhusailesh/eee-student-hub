@@ -1,27 +1,57 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "@/services/auth";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({
-      email,
-      password,
-    });
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await login({
+        email,
+        password,
+      });
+
+      console.log(res);
+
+      router.push("/dashboard");
+    } catch (err) {
+      setError(
+        err.response?.data?.message || "Login failed"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
+
       <h1 className="text-3xl font-bold text-center mb-6">
         EEE Student Hub
       </h1>
 
+      {error && (
+        <div className="bg-red-100 text-red-600 p-3 rounded mb-4">
+          {error}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-5">
+
         <div>
           <label>Email</label>
 
@@ -31,6 +61,7 @@ export default function LoginForm() {
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
 
@@ -43,15 +74,19 @@ export default function LoginForm() {
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
 
         <button
-          className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
+
       </form>
+
     </div>
   );
 }
