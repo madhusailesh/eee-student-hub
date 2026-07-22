@@ -1,11 +1,9 @@
 import api from "@/lib/axios";
 
-export const getNotes = async (subjectId) => {
-  const { data } = await api.get("/notes", {
-    params: {
-      subject: subjectId,
-    },
-  });
+export const getNotes = async (subjectCode) => {
+  const { data } = await api.get(
+    `/notes?subjectCode=${subjectCode}`
+  );
 
   return data.data;
 };

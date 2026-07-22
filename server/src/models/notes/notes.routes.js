@@ -10,15 +10,35 @@ const {
 
 const protect = require("../../middleware/auth.middleware");
 const authorize = require("../../middleware/authorize.middleware");
+const upload = require("../../middleware/upload.middleware");
 
 const router = express.Router();
-const upload = require("../../middleware/upload.middleware");
-// Student + Admin
-router.get("/", protect, getAll);
-router.get("/:id", protect, getOne);
 
-// Admin only 
-router.put("/:id", protect, authorize("admin"), update);
-router.delete("/:id", protect, authorize("admin"), remove);
-router.post("/", protect, authorize("admin"), upload.single("file"), create);
+// Public
+router.get("/", getAll);
+router.get("/:id", getOne);
+
+// Admin only
+router.post(
+  "/",
+  protect,
+  authorize("admin"),
+  upload.single("file"),
+  create
+);
+
+router.put(
+  "/:id",
+  protect,
+  authorize("admin"),
+  update
+);
+
+router.delete(
+  "/:id",
+  protect,
+  authorize("admin"),
+  remove
+);
+
 module.exports = router;

@@ -1,73 +1,57 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { getSubjectByCode } from "@/services/subjects";
 import { getNotes } from "@/services/notes";
+import { FileText, Download } from "lucide-react";
 
-export default function NotesPage() {
-  const { subjectCode } = useParams();
+export default async function NotesPage({ params }) {
+  const { subjectCode } = await params;
 
-  const [subject, setSubject] = useState(null);
-  const [notes, setNotes] = useState([]);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        const subjectData = await getSubjectByCode(subjectCode);
-        setSubject(subjectData);
-
-        const noteData = await getNotes(subjectData._id);
-        setNotes(noteData);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    load();
-  }, [subjectCode]);
-
-  if (!subject) {
-    return <p>Loading...</p>;
-  }
+  const notes = await getNotes(subjectCode);
 
   return (
-    <main className="max-w-6xl mx-auto p-8">
+    <main className="max-w-7xl mx-auto px-6 py-10">
+
       <h1 className="text-4xl font-bold mb-8">
-        {subject.name} Notes
+        Notes
       </h1>
 
       <div className="space-y-4">
+
         {notes.map((note) => (
           <div
             key={note._id}
-            className="border rounded-xl p-5"
+            className="flex items-center justify-between rounded-xl border p-5"
           >
-            <h2 className="text-xl font-semibold">
-              {note.title}
-            </h2>
 
-            <p className="text-gray-500 mt-2">
-              {note.description}
-            </p>
+            <div className="flex items-center gap-4">
+
+              <FileText />
+
+              <div>
+                <h2 className="font-semibold">
+                  {note.title}
+                </h2>
+
+                <p className="text-sm text-gray-500">
+                  PDF
+                </p>
+              </div>
+
+            </div>
 
             <a
               href={note.fileUrl}
               target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 mt-4 inline-block"
+              className="flex items-center gap-2 rounded-lg bg-black text-white px-4 py-2"
             >
+              <Download size={18} />
+
               Download
             </a>
+
           </div>
         ))}
 
-        {notes.length === 0 && (
-          <p className="text-gray-500">
-            No notes available for this subject.
-          </p>
-        )}
       </div>
+
     </main>
   );
 }
