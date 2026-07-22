@@ -1,13 +1,15 @@
-import StatsCards from "@/components/cards/StatsCards";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="max-w-7xl mx-auto p-8">
-      <h1 className="text-4xl font-bold mb-8">
+    <div className="max-w-7xl mx-auto py-20 px-6">
+
+      <h1 className="text-5xl font-bold">
         EEE Student Hub
       </h1>
 
-      <StatsCards />
-    </main>
+      <p className="mt-5 text-gray-600 text-lg">
+        One platform for Notes, PYQs, Faculty, Notices and Timetable.
+      </p>
+
+    </div>
   );
 }
