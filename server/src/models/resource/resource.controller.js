@@ -64,8 +64,8 @@ const update = async (req, res, next) => {
     const payload = { ...req.body };
 
     if (req.file) {
-      payload.fileUrl =
-  `${req.protocol}://${req.get("host")}/uploads/resources/${req.file.filename}`;
+      payload.fileUrl = req.file.path;
+      playload.filePublicId = req.file.filename;
     }
 
     const resource = await updateResource(req.params.id, payload);
