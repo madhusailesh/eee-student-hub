@@ -9,8 +9,9 @@ const {
   remove,
 } = require("./resource.controller");
 
-const { protect, authorize } = require("../../middleware/auth.middleware");
-const upload = require("../../middleware/upload");
+const protect = require("../../middleware/auth.middleware");
+const authorize = require("../../middleware/authorize.middleware");
+const upload = require("../../middleware/upload.middleware");
 
 router.get("/", getAll);
 router.get("/:id", getOne);
