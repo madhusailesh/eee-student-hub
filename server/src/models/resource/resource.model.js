@@ -43,11 +43,14 @@ const resourceSchema = new mongoose.Schema(
     fileUrl: {
       type: String,
       required: true,
+      trim: true,
     },
 
-    filePublicId: {
+    // R2 Object Key
+    fileKey: {
       type: String,
-      default: "",
+      required: true,
+      trim: true,
     },
 
     uploadedBy: {
