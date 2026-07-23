@@ -1,10 +1,14 @@
-import { getNotes } from "@/services/notes";
+import { getResources } from "@/services/resources";
 import { FileText, Download } from "lucide-react";
 
 export default async function NotesPage({ params }) {
-  const { subjectCode } = await params;
+  const { semester, subjectCode } = await params;
 
-  const notes = await getNotes(subjectCode);
+  const notes = await getResources({
+    semester,
+    subjectCode,
+    type: "notes",
+  });
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-10">
