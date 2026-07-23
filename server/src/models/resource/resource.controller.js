@@ -8,11 +8,13 @@ const {
 
 const create = async (req, res, next) => {
   try {
-    const resource = await createResource({
-      ...req.body,
-      fileUrl: req.file.path, // Change later for Cloudinary
-      uploadedBy: req.user._id,
-    });
+   const fileUrl = `${req.protocol}://${req.get("host")}/uploads/resources/${req.file.filename}`;
+
+const resource = await createResource({
+  ...req.body,
+  fileUrl,
+  uploadedBy: req.user._id,
+});
 
     res.status(201).json({
       success: true,
@@ -61,7 +63,8 @@ const update = async (req, res, next) => {
     const payload = { ...req.body };
 
     if (req.file) {
-      payload.fileUrl = req.file.path;
+      payload.fileUrl =
+  `${req.protocol}://${req.get("host")}/uploads/resources/${req.file.filename}`;
     }
 
     const resource = await updateResource(req.params.id, payload);

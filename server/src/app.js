@@ -9,10 +9,7 @@ const pyqRoutes = require("./models/pyqs/pyq.route");
 const resourceRoutes = require("./models/resource/resource.route");
 const app = express();
  const path = require("path");
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../uploads"))
-);
+
  
 app.use(
   cors({
@@ -24,6 +21,10 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"))
+);
 app.use("/api/v1", routes);
 app.get("/", (req, res) => {
   res.status(200).json({
