@@ -15,6 +15,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cloudflare": "^7.0.0",
+    "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -23,6 +24,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "multer": "^2.2.0",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^9.0.3",
     "otp-generator": "^4.0.1"
   },

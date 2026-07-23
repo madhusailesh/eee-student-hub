@@ -12,7 +12,8 @@ const create = async (req, res, next) => {
 
 const resource = await createResource({
   ...req.body,
-  fileUrl,
+  fileUrl: req.file.path,
+  filePublicId: req.file.filename,
   uploadedBy: req.user._id,
 });
 
