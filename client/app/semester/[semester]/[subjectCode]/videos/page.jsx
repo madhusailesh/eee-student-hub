@@ -20,7 +20,7 @@ export default async function VideosPage({ params }) {
             className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
           >
             Semesters
-          </Link>
+          </Link>  
           <span>/</span>
           <Link 
             href={`/semester/${semester}`} 
