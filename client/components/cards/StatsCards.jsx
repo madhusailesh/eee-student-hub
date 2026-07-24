@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { getDashboard } from "@/services/dashboard";
+import { motion } from "framer-motion";
+import { 
+  FileText, 
+  FileQuestion, 
+  BookOpen, 
+  Users, 
+  Bell, 
+  Calendar 
+} from "lucide-react";
 
 export default function StatsCards() {
   const [stats, setStats] = useState(null);
@@ -12,9 +21,9 @@ export default function StatsCards() {
       try {
         const data = await getDashboard();
         console.log("Dashboard Response:", data);
-        setStats(data.data.statistics);
+        setStats(data.data?.statistics || {});
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch dashboard stats:", err);
       } finally {
         setLoading(false);
       }
@@ -23,28 +32,109 @@ export default function StatsCards() {
     load();
   }, []);
 
-  if (loading)
-    return <p className="text-center">Loading statistics...</p>;
+  const statItems = [
+    {
+      title: "Notes",
+      value: stats?.notes ?? 0,
+      icon: FileText,
+      color: "bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400",
+      accent: "from-purple-500 to-indigo-500",
+    },
+    {
+      title: "PYQs",
+      value: stats?.pyqs ?? 0,
+      icon: FileQuestion,
+      color: "bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400",
+      accent: "from-cyan-500 to-blue-500",
+    },
+    {
+      title: "Subjects",
+      value: stats?.subjects ?? 0,
+      icon: BookOpen,
+      color: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
+      accent: "from-emerald-500 to-teal-500",
+    },
+    {
+      title: "Faculty",
+      value: stats?.faculty ?? 0,
+      icon: Users,
+      color: "bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400",
+      accent: "from-indigo-500 to-violet-500",
+    },
+    {
+      title: "Notices",
+      value: stats?.notices ?? 0,
+      icon: Bell,
+      color: "bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
+      accent: "from-rose-500 to-pink-500",
+    },
+    {
+      title: "Timetables",
+      value: stats?.timetables ?? 0,
+      icon: Calendar,
+      color: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
+      accent: "from-amber-500 to-orange-500",
+    },
+  ];
+
+  if (loading) {
+    return <StatsSkeleton />;
+  }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-      <Card title="Notes" value={stats.notes} />
-      <Card title="PYQs" value={stats.pyqs} />
-      <Card title="Subjects" value={stats.subjects} />
-      <Card title="Faculty" value={stats.faculty} />
-      <Card title="Notices" value={stats.notices} />
-      <Card title="Timetables" value={stats.timetables} />
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 md:gap-4 my-8">
+      {statItems.map((item, index) => {
+        const Icon = item.icon;
+
+        return (
+          <motion.div
+            key={item.title}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.04 }}
+            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:border-cyan-500/40 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-500/30 transform-gpu"
+          >
+            {/* Soft Ambient Corner Light */}
+            <div className={`absolute -right-8 -top-8 h-20 w-20 rounded-full bg-gradient-to-br ${item.accent} opacity-10 blur-xl transition-opacity duration-300 group-hover:opacity-20`} />
+
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-xs font-bold tracking-tight text-slate-500 dark:text-slate-400">
+                {item.title}
+              </span>
+
+              <div className={`flex h-8 w-8 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105 ${item.color}`}>
+                <Icon className="h-4 w-4" />
+              </div>
+            </div>
+
+            <div className="mt-3">
+              <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100 font-mono">
+                {item.value}
+              </span>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 }
 
-function Card({ title, value }) {
+{/* Smooth Skeleton while loading */}
+function StatsSkeleton() {
   return (
-    <div className="rounded-xl bg-white shadow p-6 text-center">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="text-4xl font-bold mt-3 text-blue-600">
-        {value}
-      </p>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 md:gap-4 my-8">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div
+          key={i}
+          className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white/50 p-4 shadow-sm backdrop-blur-md animate-pulse dark:border-slate-800 dark:bg-slate-900/40"
+        >
+          <div className="flex items-center justify-between">
+            <div className="h-3 w-16 rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="h-8 w-8 rounded-xl bg-slate-200 dark:bg-slate-800" />
+          </div>
+          <div className="mt-4 h-7 w-12 rounded bg-slate-200 dark:bg-slate-800" />
+        </div>
+      ))}
     </div>
   );
 }
