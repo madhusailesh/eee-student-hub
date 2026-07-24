@@ -1,7 +1,7 @@
-const catchAsync = require("../../utils/catchAsync");
+const asyncHandler = require("../../utils/asyncHandler");
 const facultyService = require("./faculty.service");
 
-const getAllFaculty = catchAsync(async (req, res) => {
+const getAllFaculty = asyncHandler(async (req, res) => {
   const faculty = await facultyService.getAllFaculty();
 
   res.status(200).json({
@@ -11,7 +11,7 @@ const getAllFaculty = catchAsync(async (req, res) => {
   });
 });
 
-const getFacultyById = catchAsync(async (req, res) => {
+const getFacultyById = asyncHandler(async (req, res) => {
   const faculty = await facultyService.getFacultyById(req.params.id);
 
   res.status(200).json({

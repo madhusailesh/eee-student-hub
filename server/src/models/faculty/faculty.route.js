@@ -1,9 +1,8 @@
 const express = require("express");
 
-const validate = require("../../middleware/validate");
+const validate = require("../../middleware/validate.middleware");
 const facultyValidation = require("./faculty.validation");
-const facultyController = require("./faculty.controller");
-const facultyRoutes = require("../models/faculty/faculty.routes");
+const facultyController = require("./faculty.controller"); 
 
 const router = express.Router();
 
@@ -14,6 +13,5 @@ router.get(
   validate(facultyValidation.getFacultyById),
   facultyController.getFacultyById
 );
-
-router.use("/faculty", facultyRoutes);
+ 
 module.exports = router;

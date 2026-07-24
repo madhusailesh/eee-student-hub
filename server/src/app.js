@@ -5,6 +5,7 @@ const routes = require("./routes");
 const errorHandler = require("./middleware/error.middleware");
 const notesRoutes = require("./models/notes/notes.routes");
 const pyqRoutes = require("./models/pyqs/pyq.route");
+const facultyRoutes = require("./models/faculty/faculty.route");
 
 const resourceRoutes = require("./models/resource/resource.route");
 const app = express();
@@ -35,5 +36,6 @@ app.get("/", (req, res) => {
  app.use("/api/v1/notes", notesRoutes);
  app.use("/api/v1/resources", resourceRoutes);
 app.use("/api/v1/pyqs", pyqRoutes);
+app.use("/api/v1/faculty", facultyRoutes);
 app.use(errorHandler);
 module.exports = app;
