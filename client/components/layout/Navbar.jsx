@@ -115,7 +115,7 @@ export default function Navbar() {
           {/* User Auth Button */}
           {user ? (
             <Link
-              href="/profile"
+              // href="/profile"
               className="flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-600 transition-all hover:bg-cyan-500/20 dark:text-cyan-400"
             >
               <User className="h-4 w-4" />
