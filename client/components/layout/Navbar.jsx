@@ -33,7 +33,7 @@ export default function Navbar() {
   const navLinks = [
     { name: "Semesters", href: "/semester", icon: BookOpen },
     { name: "Faculty", href: "/faculty", icon: Users },
-    { name: "Notices", href: "/notices", icon: BellRing },
+    // { name: "Notices", href: "/notices", icon: BellRing },
   ];
 
   const isDark = theme === "dark";
