@@ -1,13 +1,13 @@
 import ResourcePage from "@/components/resources/ResourcePage";
 
-export default async function NotesPage({ params }) {
+export default async function BooksPage({ params }) {
 
   const { semester, subjectCode } = await params;
 
   return (
     <ResourcePage
-      title="Notes"
-      type="notes"
+      title="Books"
+      type="books"
       semester={semester}
       subject={subjectCode}
     />
