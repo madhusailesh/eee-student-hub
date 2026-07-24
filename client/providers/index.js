@@ -1,5 +1,15 @@
+// client/providers/index.js
 "use client";
 
+import { AuthProvider } from "./AuthProvider";
+import { ThemeProvider } from "./ThemeProvider";
+
 export default function Providers({ children }) {
-  return children;
+  return (
+    <AuthProvider>
+      <ThemeProvider>
+        {children}
+      </ThemeProvider>
+    </AuthProvider>
+  );
 }
