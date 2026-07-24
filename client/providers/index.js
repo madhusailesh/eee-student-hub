@@ -1,4 +1,3 @@
-// client/providers/index.js
 "use client";
 
 import { AuthProvider } from "./AuthProvider";
