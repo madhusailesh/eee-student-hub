@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
-
 const generateAccessToken = (user) => {
+  console.log("=== DEBUG ACCESS TOKEN EXPIRY ===");
+  console.log("process.env.ACCESS_TOKEN_EXPIRY:", process.env.ACCESS_TOKEN_EXPIRY);
+  console.log("Type of ACCESS_TOKEN_EXPIRY:", typeof process.env.ACCESS_TOKEN_EXPIRY);
+  console.log("=================================");
+
   return jwt.sign(
     {
       id: user._id,
@@ -9,7 +13,7 @@ const generateAccessToken = (user) => {
     },
     process.env.JWT_ACCESS_SECRET,
     {
-      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "7d",
     }
   );
 };
