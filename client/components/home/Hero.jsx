@@ -118,13 +118,7 @@ export default function Hero() {
                 <span>Explore Semesters</span>
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-
-              <Link
-                href="/notices"
-                className="rounded-xl border border-slate-700 bg-slate-900/60 px-6 py-3.5 text-sm font-bold text-slate-200 backdrop-blur-md transition-all hover:border-slate-500 hover:bg-slate-800/80 hover:text-white active:scale-95"
-              >
-                Latest Notices
-              </Link>
+ 
             </motion.div>
           </div>
 
