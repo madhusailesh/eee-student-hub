@@ -11,7 +11,7 @@ const subjectRoutes = require("../models/subjects/subject.routes"); // ✅
 router.use("/auth", authRoutes);
 router.use("/dashboard", dashboardRoutes);
 router.use("/subjects", subjectRoutes); // ✅
-router.use("/notices", noticeRoutes);
+// router.use("/notices", noticeRoutes);
 router.use("/timetable", timetableRoutes);
 
 router.get("/health", (req, res) => {

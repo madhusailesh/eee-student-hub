@@ -44,7 +44,7 @@ const quickLinks = [
   {
     title: "Timetable",
     desc: "Current semester routine",
-    href: "/timetable",
+    // href: "/timetable",
     icon: Calendar,
     isExternal: false,
     color: "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400",
@@ -70,7 +70,7 @@ const quickLinks = [
   {
     title: "Official Notices",
     desc: "Latest University Updates",
-    href: "/notices",
+    // href: "/notices",
     icon: Bell,
     isExternal: false,
     color: "bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
