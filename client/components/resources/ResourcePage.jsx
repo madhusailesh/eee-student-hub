@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import ResourceGrid from "./ResourceGrid";
 import EmptyState from "./EmptyState";
-import { Search } from "lucide-react";
+import SearchBar from "./SearchBar";
+import ResourceSkeleton from "./ResourceSkeleton";
+import { FolderGit2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ResourcePage({
-  title,
+  title = "Resources",
   type,
   semester,
   subject,
@@ -45,8 +48,8 @@ export default function ResourcePage({
         },
       });
 
-      setResources(data.data);
-      setFilteredResources(data.data);
+      setResources(data.data || []);
+      setFilteredResources(data.data || []);
     } catch (err) {
       console.error(err);
     } finally {
@@ -54,52 +57,43 @@ export default function ResourcePage({
     }
   };
 
-  if (loading) {
-    return (
-      <div className="py-20 text-center">
-        Loading {title}...
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
+    <div className="space-y-6 md:space-y-8">
+      
+      {/* Header Bar */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between border-b border-slate-200 pb-6 dark:border-slate-800"
+      >
         <div>
-          <h1 className="text-3xl font-bold">
+          <div className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 text-xs font-mono tracking-wider uppercase mb-1">
+            <FolderGit2 className="h-4 w-4" /> Academic Vault
+          </div>
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 bg-clip-text text-transparent dark:from-slate-100 dark:via-slate-200 dark:to-slate-400 capitalize">
             {title}
           </h1>
-
-          <p className="text-gray-500">
-            Browse all available {title.toLowerCase()}.
+          <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-1">
+            Browse and download all verified {title.toLowerCase()} for this course.
           </p>
         </div>
 
-        <div className="relative w-full md:w-80">
+        {/* Re-usable Search Bar Component */}
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          placeholder={`Search ${title.toLowerCase()}...`}
+        />
+      </motion.div>
 
-          <Search
-            size={18}
-            className="absolute left-3 top-3 text-gray-400"
-          />
-
-          <input
-            type="text"
-            placeholder={`Search ${title}`}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-
-        </div>
-
-      </div>
-
-      {filteredResources.length === 0 ? (
+      {/* Main Content Area */}
+      {loading ? (
+        <ResourceSkeleton />
+      ) : filteredResources.length === 0 ? (
         <EmptyState
           title={`No ${title}`}
-          description={`No ${title.toLowerCase()} have been uploaded yet.`}
+          description={`No ${title.toLowerCase()} match your search query or have been uploaded yet.`}
         />
       ) : (
         <ResourceGrid resources={filteredResources} />

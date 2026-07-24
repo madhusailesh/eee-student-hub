@@ -1,26 +1,25 @@
-import ResourceCard from "./ResourceCard";
+"use client";
 
-export default function ResourceGrid({ resources }) {
+import ResourceCard from "./ResourceCard";
+import EmptyState from "./EmptyState";
+
+export default function ResourceGrid({ resources = [] }) {
   if (!resources.length) {
     return (
-      <div className="rounded-xl border border-dashed p-12 text-center">
-        <h2 className="text-xl font-semibold">
-          No Resources Found
-        </h2>
-
-        <p className="mt-2 text-gray-500">
-          No files are available for this section.
-        </p>
-      </div>
+      <EmptyState
+        title="No Resources Found"
+        description="No files are available for this section."
+      />
     );
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {resources.map((resource) => (
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 md:gap-6">
+      {resources.map((resource, index) => (
         <ResourceCard
-          key={resource._id}
+          key={resource._id || index}
           resource={resource}
+          index={index}
         />
       ))}
     </div>
