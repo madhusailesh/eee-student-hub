@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     console.log(res);
 
-    const user = res.data.user;
+    const user = res.data;
 
     // Save data
     localStorage.setItem("token", res.data.token);
@@ -41,6 +41,9 @@ export default function LoginForm() {
     }
 
   } catch (err) {
+    console.log(err);
+  console.log(err.response);
+  console.log(err.response?.data);
     setError(err.response?.data?.message || "Login failed");
   } finally {
     setLoading(false);
