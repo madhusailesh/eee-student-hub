@@ -12,7 +12,7 @@ import {
   FolderOpen,
   ArrowLeft,
   ArrowRight,
-  Cpu
+  Cpu,
 } from "lucide-react";
 
 // Thoda descriptions add kar diya to make cards look fuller
@@ -71,38 +71,41 @@ export default function SubjectDashboard() {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
   };
 
   return (
     <main className="min-h-screen bg-stone-100/60 text-slate-900 px-4 py-8 md:px-8 md:py-12 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-cyan-500 selection:text-white">
-      
       {/* Background Ambient Glows */}
-      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
+      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none transform-gpu will-change-transform" />
       <div className="fixed -bottom-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
-        
         {/* Navigation & Header */}
         <div className="space-y-5 border-b border-slate-200 pb-6 dark:border-slate-800">
-          
           {/* Breadcrumbs */}
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <Link 
-              href="/semester" 
+            <Link
+              href="/semester"
               className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
             >
               Semesters
             </Link>
             <span>/</span>
-            <Link 
-              href={`/semester/${semester}`} 
+            <Link
+              href={`/semester/${semester}`}
               className="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
             >
               Semester {semester}
             </Link>
             <span>/</span>
-            <span className="text-slate-900 dark:text-slate-200 font-bold uppercase">{subjectCode}</span>
+            <span className="text-slate-900 dark:text-slate-200 font-bold uppercase">
+              {subjectCode}
+            </span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -111,17 +114,18 @@ export default function SubjectDashboard() {
                 <Cpu className="h-4 w-4" /> Resource Dashboard
               </div>
               <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 bg-clip-text text-transparent dark:from-slate-100 dark:via-slate-200 dark:to-slate-400 uppercase">
-                {subjectCode?.replace(/-/g, ' ')}
+                {subjectCode?.replace(/-/g, " ")}
               </h1>
               <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-                Explore all academic resources, past year questions, and study materials for this specific subject.
+                Explore all academic resources, past year questions, and study
+                materials for this specific subject.
               </p>
             </div>
           </div>
         </div>
 
         {/* Resources Grid with Framer Motion */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="show"
@@ -169,7 +173,6 @@ export default function SubjectDashboard() {
             );
           })}
         </motion.div>
-
       </div>
     </main>
   );

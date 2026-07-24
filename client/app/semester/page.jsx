@@ -9,22 +9,40 @@ const semesters = [
   { id: 2, title: "Semester 2", year: "1st Year", status: "Basic Engineering" },
   { id: 3, title: "Semester 3", year: "2nd Year", status: "Core Departmental" },
   { id: 4, title: "Semester 4", year: "2nd Year", status: "Core Departmental" },
-  { id: 5, title: "Semester 5", year: "3rd Year", status: "Advanced Electives" },
-  { id: 6, title: "Semester 6", year: "3rd Year", status: "Advanced Electives" },
-  { id: 7, title: "Semester 7", year: "4th Year", status: "Specialization & Projects" },
-  { id: 8, title: "Semester 8", year: "4th Year", status: "Specialization & Projects" },
+  {
+    id: 5,
+    title: "Semester 5",
+    year: "3rd Year",
+    status: "Advanced Electives",
+  },
+  {
+    id: 6,
+    title: "Semester 6",
+    year: "3rd Year",
+    status: "Advanced Electives",
+  },
+  {
+    id: 7,
+    title: "Semester 7",
+    year: "4th Year",
+    status: "Specialization & Projects",
+  },
+  {
+    id: 8,
+    title: "Semester 8",
+    year: "4th Year",
+    status: "Specialization & Projects",
+  },
 ];
 
 export default function SemesterPage() {
   return (
     <div className="min-h-screen bg-stone-100/60 text-slate-900 px-4 py-8 md:px-8 md:py-12 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-cyan-500 selection:text-white">
-      
       {/* Background Ambient Glows */}
-      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
+      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none transform-gpu will-change-transform" />
       <div className="fixed -bottom-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8">
-        
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: -15 }}
@@ -40,7 +58,8 @@ export default function SemesterPage() {
               Select Semester
             </h1>
             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-              Access verified lecture notes, previous year question papers (PYQs), syllabus, and reference books tailored for EEE.
+              Access verified lecture notes, previous year question papers
+              (PYQs), syllabus, and reference books tailored for EEE.
             </p>
           </div>
 
@@ -57,7 +76,11 @@ export default function SemesterPage() {
               key={semester.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: index * 0.05, ease: "easeOut" }}
+              transition={{
+                duration: 0.35,
+                delay: index * 0.05,
+                ease: "easeOut",
+              }}
             >
               <Link
                 href={`/semester/${semester.id}`}

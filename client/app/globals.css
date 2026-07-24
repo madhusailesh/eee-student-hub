@@ -1,4 +1,22 @@
 @import "tailwindcss";
 
-/* Tailwind v4 class-based dark mode enabler */
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Smooth Scrolling & Performance Hacks */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force Hardware Acceleration for blur and animated cards */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Optimize Backdrop Blur repaints */
+.backdrop-blur-xl, .backdrop-blur-md {
+  will-change: backdrop-filter;
+}

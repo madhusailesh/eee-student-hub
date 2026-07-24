@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { getSubjectsBySemester } from "@/services/subjects";
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Award, 
-  Layers, 
-  ArrowRight, 
-  FolderOpen 
+import {
+  ArrowLeft,
+  BookOpen,
+  Award,
+  Layers,
+  ArrowRight,
+  FolderOpen,
 } from "lucide-react";
 
 export default async function SemesterSubjectsPage({ params }) {
@@ -15,27 +15,26 @@ export default async function SemesterSubjectsPage({ params }) {
 
   return (
     <div className="min-h-screen bg-stone-100/60 text-slate-900 px-4 py-8 md:px-8 md:py-12 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100 selection:bg-cyan-500 selection:text-white">
-      
       {/* Background Ambient Glows */}
-      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
+      <div className="fixed -top-40 -left-40 h-96 w-96 rounded-full bg-cyan-500/10 blur-[90px] pointer-events-none transform-gpu will-change-transform" />
       <div className="fixed -bottom-40 -right-40 h-96 w-96 rounded-full bg-indigo-500/10 blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8">
-        
         {/* Navigation & Header */}
         <div className="space-y-4 border-b border-slate-200 pb-6 dark:border-slate-800">
-          
           {/* Back Button & Breadcrumbs */}
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-            <Link 
-              href="/semester" 
+            <Link
+              href="/semester"
               className="flex items-center gap-1.5 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               <span>Semesters</span>
             </Link>
             <span>/</span>
-            <span className="text-slate-900 dark:text-slate-200 font-bold">Semester {semester}</span>
+            <span className="text-slate-900 dark:text-slate-200 font-bold">
+              Semester {semester}
+            </span>
           </div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -47,7 +46,8 @@ export default async function SemesterSubjectsPage({ params }) {
                 Semester {semester} Subjects
               </h1>
               <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 mt-2">
-                Select a subject to browse lecture notes, previous papers, syllabus, and video resources.
+                Select a subject to browse lecture notes, previous papers,
+                syllabus, and video resources.
               </p>
             </div>
 
@@ -110,9 +110,12 @@ export default async function SemesterSubjectsPage({ params }) {
           /* Empty State */
           <div className="flex flex-col items-center justify-center py-20 rounded-3xl border border-dashed border-slate-300 bg-white/40 text-center dark:border-slate-800 dark:bg-slate-900/20">
             <FolderOpen className="h-12 w-12 text-slate-400 dark:text-slate-600 mb-3" />
-            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">No Subjects Found</h3>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
+              No Subjects Found
+            </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
-              There are currently no subjects listed for Semester {semester}. Check back later or upload resources in Admin.
+              There are currently no subjects listed for Semester {semester}.
+              Check back later or upload resources in Admin.
             </p>
             <Link
               href="/semester"
