@@ -1,4 +1,3 @@
-// providers/ThemeProvider.jsx
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -10,10 +9,8 @@ const ThemeContext = createContext({
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("dark");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const savedTheme = localStorage.getItem("theme") || "dark";
     setTheme(savedTheme);
     if (savedTheme === "dark") {
@@ -42,10 +39,4 @@ export function ThemeProvider({ children }) {
   );
 }
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    return { theme: "dark", toggleTheme: () => {} };
-  }
-  return context;
-};
+export const useTheme = () => useContext(ThemeContext);
