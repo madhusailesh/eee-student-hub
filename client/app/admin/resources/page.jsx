@@ -60,7 +60,7 @@ export default function SubjectDashboard() {
   const semester = params?.semester;
   const subjectCode = params?.subjectCode;
 
-  console.log("Current Semester:", semester, "| Subject Code:", subjectCode);
+  
 
   // Early return if params haven't hydrated yet
   if (!semester || !subjectCode) {
