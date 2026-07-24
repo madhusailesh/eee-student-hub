@@ -394,15 +394,53 @@ module.exports = [
   type: "LAB",
   credits: 1.5,
 },
+
+{
+  branch: "EEE",
+  semester: 5,
+  code: "EC1327",
+  name: "BASIC COMMUNICATION ENGINEERING",
+  type: "THEORY",
+  credits: 3,
+},
 {
   branch: "EEE",
   semester: 5,
   code: "EE1382",
-  name: "Control Systems Laboratory-I",
+  name: "Control Systems Laboratory",
   type: "LAB",
   credits: 1.5,
 },
+{
+  branch: "EEE",
+  semester: 5,
+  code: "PE1304",
+  name: "Industrial Safety Engineering",
+  type: "THEORY",
+  credits: 2,
+},
+ 
+{
+  branch: "EEE",
+  semester: 5,
+  code: "HS1301",
+  name: "PROFESSIONAL ETHICS FOR ENGINEERS",
+  type: "THEORY",
+  credits: 2,
+},
+{
+  branch: "EEE",
+  semester: 5,
+  code: "EE1383",
+  name: "MACHINE LEARNING LABORATORY",
+  type: "LAB",
+  credits: 2,
+},
 
+
+// ==========================
+// Semester 6
+// ==========================
 {
   branch: "EEE",
   semester: 6,
@@ -411,11 +449,6 @@ module.exports = [
   type: "LAB",
   credits: 1.5,
 },
-
-// ==========================
-// Semester 6
-// ==========================
-
 {
   branch: "EEE",
   semester: 6,
