@@ -14,28 +14,38 @@ export default function LoginForm() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setLoading(true);
-    setError("");
+  setLoading(true);
+  setError("");
 
-    try {
-      const res = await login({
-        email,
-        password,
-      });
+  try {
+    const res = await login({
+      email,
+      password,
+    });
 
-      console.log(res);
+    console.log(res);
 
+    const user = res.data.user;
+
+    // Save data
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    // Redirect according to role
+    if (user.role === "admin") {
+      router.push("/admin");
+    } else {
       router.push("/dashboard");
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed"
-      );
-    } finally {
-      setLoading(false);
     }
-  };
+
+  } catch (err) {
+    setError(err.response?.data?.message || "Login failed");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">

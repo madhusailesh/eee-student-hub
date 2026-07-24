@@ -13,18 +13,13 @@ export default function Hero() {
 
       <div className="flex gap-4 mt-8">
         <Link
-          href="/notes"
+          href="/semester"
           className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold"
         >
-          Explore Notes
+          Explore semesters
         </Link>
 
-        <Link
-          href="/pyqs"
-          className="border border-white px-6 py-3 rounded-lg"
-        >
-          Previous Year Questions
-        </Link>
+        
       </div>
     </section>
   );

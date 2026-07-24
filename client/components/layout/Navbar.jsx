@@ -14,15 +14,13 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center gap-6">
-          <Link href="/notes">Notes</Link>
-
-          <Link href="/pyqs">PYQs</Link>
+          <Link href="/semester">Semester</Link>
+ 
 
           <Link href="/faculty">Faculty</Link>
 
           <Link href="/notices">Notices</Link>
-
-          <Link href="/timetable">Timetable</Link>
+ 
 
           {user ? (
             <Link href="/profile">{user.fullName}</Link>
