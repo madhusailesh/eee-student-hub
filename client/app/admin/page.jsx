@@ -30,7 +30,7 @@ export default function AdminDashboard() {
         </h1>
 
         <p className="text-gray-500 mt-2">
-          Welcome to EEE Student Hub Admin Panel.
+          Welcome to CORE EEE Admin Panel.
         </p>
       </div>
 

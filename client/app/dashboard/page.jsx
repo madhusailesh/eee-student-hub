@@ -12,7 +12,7 @@ export default function Dashboard() {
    
 return (
   <div>
-    <h1>EEE Student Hub Dashboard</h1>
+    <h1>CORE EEE Dashboard</h1>
 
     {user ? (
       <p>Welcome, {user.fullName}</p>

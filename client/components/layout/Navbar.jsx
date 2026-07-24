@@ -42,7 +42,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col">
             <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-              EEE<span className="bg-gradient-to-r from-cyan-500 to-indigo-500 bg-clip-text text-transparent">HUB</span>
+              CORE<span className="bg-gradient-to-r from-cyan-500 to-indigo-500 bg-clip-text text-transparent">EEE</span>
             </span>
           </div>
         </Link>

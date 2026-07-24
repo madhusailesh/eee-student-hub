@@ -54,7 +54,7 @@ export default function LoginForm() {
     <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
 
       <h1 className="text-3xl font-bold text-center mb-6">
-        EEE Student Hub
+        CORE EEE Login
       </h1>
 
       {error && (

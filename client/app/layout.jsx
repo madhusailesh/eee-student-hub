@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/providers/AuthProvider";
 
 export const metadata = {
-  title: "EEE Student Hub",
+  title: "CORE EEE",
 };
 
 export default function RootLayout({ children }) {
