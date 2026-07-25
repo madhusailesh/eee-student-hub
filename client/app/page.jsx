@@ -5,6 +5,7 @@ import Hero from "@/components/home/Hero";
 import StatsCards from "@/components/home/StatsCards";
 import { getDashboardData } from "@/services/dashboard";
 import QuickAccess from "@/components/home/QuickAccess";
+import Loader from "@/components/common/Loader";
 export default function HomePage() {
   const [dashboard, setDashboard] = useState(null);
 
@@ -23,8 +24,8 @@ export default function HomePage() {
 
   if (!dashboard) {
     return (
-      <div className="max-w-7xl mx-auto py-20">
-        Loading...
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <Loader text="Loading Hub Dashboard..." />
       </div>
     );
   }
