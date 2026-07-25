@@ -17,7 +17,6 @@ export default function TeamPage() {
   };
 
   const admins = [
-    
     {
       name: "Satyaprakash Mishra",
       role: "Admin",
@@ -25,6 +24,14 @@ export default function TeamPage() {
       bio: "Overseeing course material uploads, PYQs, and student announcements.",
       image: "/satyaprakash.png",  
       email: "satyaprakash551043@gmail.com",
+    },
+    {
+      name: "Biswaranjan Mohapatra",
+      role: "Admin",
+      branch: "EEE Department (2024 - 2028)",
+      bio: "handling student queries, feedback, and ensuring smooth communication within the hub.",
+      image: "/biswa.png",  
+      email: "bishwaranjanmohapatra05@gmail.com",
     },
   ];
 
@@ -53,7 +60,7 @@ export default function TeamPage() {
             <div className="absolute top-0 right-0 -z-10 w-48 h-48 bg-cyan-500/10 dark:bg-cyan-500/20 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-500" />
 
             <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 text-center sm:text-left">
-              {/* Developer Photo (Largest Size) */}
+              {/* Developer Photo */}
               <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden border-2 border-cyan-500 p-1 shadow-xl shrink-0">
                 <img
                   src={developer.image}
@@ -123,10 +130,10 @@ export default function TeamPage() {
             {admins.map((admin, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300"
+                className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition-all duration-300"
               >
-                {/* Admin Photo (Enlarged to w-24 h-24) */}
-                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-purple-500/60 p-0.5 mb-4 shadow-md">
+                {/* Admin Photo (Enlarged to w-28 h-28 sm:w-32 sm:h-32) */}
+                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-purple-500/60 p-1 mb-5 shadow-md shrink-0">
                   <img
                     src={admin.image}
                     alt={admin.name}
@@ -140,7 +147,7 @@ export default function TeamPage() {
                 <p className="text-xs font-medium text-purple-600 dark:text-purple-400 mb-2">
                   {admin.role} • {admin.branch}
                 </p>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
                   {admin.bio}
                 </p>
 
