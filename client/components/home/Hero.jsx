@@ -8,17 +8,17 @@ import { ArrowRight, BookOpen, Sparkles, ChevronLeft, ChevronRight } from "lucid
 // Department Carousel Images
 const slideImages = [
   {
-    url: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=1600",
+    url: "https://i.ibb.co/RpNkkD17/image.png",
     title: "Electrical & Electronics Department",
     subtitle: "Department of EEE — VSSUT Burla",
   },
   {
-    url: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=1600",
+    url: "https://i.ibb.co/WWPZBWHj/image.png",
     title: "Advanced Power Labs & Innovation",
     subtitle: "Empowering Engineers with Practical Skills",
   },
   {
-    url: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&q=80&w=1600",
+    url: "https://i.ibb.co/RpNkkD17/image.png",
     title: "Smart Learning & Academic Hub",
     subtitle: "Your Complete Academic Resource Center",
   },
