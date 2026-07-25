@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next dev --hostname 0.0.0.0",
-  "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next build",
-  "start": "next start",
-  "lint": "eslint"
-},
+    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next dev --hostname 0.0.0.0",
+    "build": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192\" next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@hookform/resolvers": "^5.4.0",
+    "@next/third-parties": "^16.2.11",
     "axios": "^1.18.1",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^1.41.3",
