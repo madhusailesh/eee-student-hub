@@ -17,14 +17,7 @@ export default function TeamPage() {
   };
 
   const admins = [
-    {
-      name: "Bikash Barik",
-      role: "Admin",
-      branch: "EEE Department (2024 - 2028)",
-      bio: "Managing academic resources, notices, and overall hub operations.",
-      image: "/logo.png",  
-      email: "bikashbarik@gmail.com",
-    },
+    
     {
       name: "Satyaprakash Mishra",
       role: "Admin",
