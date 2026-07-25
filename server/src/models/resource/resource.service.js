@@ -29,7 +29,7 @@ const getAllResources = async (filters) => {
   return await Resource.find(query)
     .populate("subject", "name code semester")
     .populate("uploadedBy", "fullName email")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: 1 });
 };
 
 const getResourceById = async (id) => {
