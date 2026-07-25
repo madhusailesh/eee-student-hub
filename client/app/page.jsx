@@ -25,7 +25,7 @@ export default function HomePage() {
   if (!dashboard) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
-        <Loader text="Loading Hub Dashboard..." />
+        <Loader text="Loading CORE EEE ..." />
       </div>
     );
   }
