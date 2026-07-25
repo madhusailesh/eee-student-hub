@@ -4,11 +4,9 @@ const ApiError = require("../utils/ApiError");
 
 const protect = async (req, res, next) => {
   try {
-console.log("Cookies:", req.cookies);
-console.log("Cookie Header:", req.headers.cookie);
-console.log("Token:", req.cookies?.accessToken);
     let token;
 
+    // Authorization Header
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer ")
@@ -16,28 +14,40 @@ console.log("Token:", req.cookies?.accessToken);
       token = req.headers.authorization.split(" ")[1];
     }
 
+    // Cookie
     if (!token && req.cookies?.accessToken) {
       token = req.cookies.accessToken;
     }
 
-    console.log("TOKEN:", token);
+    // No token found
+    if (!token) {
+      return next(new ApiError(401, "Unauthorized"));
+    }
 
+    // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-    console.log("DECODED:", decoded);
-
+    // Find User
     const user = await User.findById(decoded.id).select(
       "-password -refreshToken"
     );
+
+    if (!user) {
+      return next(new ApiError(401, "User not found"));
+    }
 
     req.user = user;
 
     next();
   } catch (error) {
-    console.log("JWT ERROR:", error.name);
-    console.log("JWT MESSAGE:", error.message);
+    if (
+      error.name === "TokenExpiredError" ||
+      error.name === "JsonWebTokenError"
+    ) {
+      return next(new ApiError(401, "Invalid or expired token"));
+    }
 
-    next(new ApiError(401, error.message));
+    next(error);
   }
 };
 

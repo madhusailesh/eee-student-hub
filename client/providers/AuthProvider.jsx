@@ -13,16 +13,20 @@ export function AuthProvider({ children }) {
     try {
       const res = await api.get("/auth/me");
       setUser(res.data.data);
-    } catch {
+    } catch (err) {
+      if (err.response?.status !== 401) {
+        console.error(err);
+      }
+
       setUser(null);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+useEffect(() => {
+  fetchUser();
+}, []);
 
   return (
     <AuthContext.Provider
