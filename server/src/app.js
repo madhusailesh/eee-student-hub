@@ -1,33 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
+
 const routes = require("./routes");
 const errorHandler = require("./middleware/error.middleware");
+
 const notesRoutes = require("./models/notes/notes.routes");
 const pyqRoutes = require("./models/pyqs/pyq.route");
 const facultyRoutes = require("./models/faculty/faculty.route");
 const resourceRoutes = require("./models/resource/resource.route");
-const path = require("path");
 
 const app = express();
 
-// Allowed Origins List
+// Required for Render behind proxy
+app.set("trust proxy", 1);
+
+// Allowed Frontend Origins
 const allowedOrigins = [
-  process.env.CLIENT_URL,
   "http://localhost:3000",
-].filter(Boolean); // removes undefined values if process.env.CLIENT_URL isn't set yet
+  process.env.CLIENT_URL,
+].filter(Boolean);
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps, curl, or server-to-server)
+    origin(origin, callback) {
+      // Allow Postman / Mobile Apps / Server Requests
       if (!origin) return callback(null, true);
-      
-      if (allowedOrigins.some((o) => origin.startsWith(o.replace(/\/$/, "")))) {
+
+      if (allowedOrigins.includes(origin)) {
         return callback(null, true);
-      } else {
-        return callback(null, true); // production me specific domain ke liye allow matching
       }
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
     },
     credentials: true,
   })
@@ -37,10 +42,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// Static Uploads
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"))
+);
 
+// Main Routes
 app.use("/api/v1", routes);
 
+// Extra Routes
+app.use("/api/v1/notes", notesRoutes);
+app.use("/api/v1/resources", resourceRoutes);
+app.use("/api/v1/pyqs", pyqRoutes);
+app.use("/api/v1/faculty", facultyRoutes);
+
+// Health Check
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -48,11 +65,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/api/v1/notes", notesRoutes);
-app.use("/api/v1/resources", resourceRoutes);
-app.use("/api/v1/pyqs", pyqRoutes);
-app.use("/api/v1/faculty", facultyRoutes);
-
+// Error Handler
 app.use(errorHandler);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 const asyncHandler = require("../../utils/asyncHandler");
 const ApiResponse = require("../../utils/ApiResponse");
- 
+
 const {
   signup,
   verifyOtp,
@@ -8,6 +8,15 @@ const {
   getCurrentUser,
   refreshAccessToken,
 } = require("./auth.service");
+
+// Shared Cookie Options
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  path: "/",
+};
+
 const signupController = asyncHandler(async (req, res) => {
   const user = await signup(req.body);
 
@@ -15,13 +24,14 @@ const signupController = asyncHandler(async (req, res) => {
     new ApiResponse(
       201,
       {
-        id: user._id,
+        id: user.id,
         email: user.email,
       },
       "OTP sent successfully"
     )
   );
 });
+
 const verifyOtpController = asyncHandler(async (req, res) => {
   const result = await verifyOtp(req.body);
 
@@ -37,33 +47,28 @@ const verifyOtpController = asyncHandler(async (req, res) => {
 const loginController = asyncHandler(async (req, res) => {
   const { user, accessToken, refreshToken } = await login(req.body);
 
-  return res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
-    })
-    .cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        {
-          id: user._id,
-          fullName: user.fullName,
-          email: user.email,
-          role: user.role,
-          accessToken, // Mobile apps ke liye useful
-        },
-        "Login successful"
-      )
-    );
+  res.cookie("accessToken", accessToken, {
+    ...cookieOptions,
+    maxAge: 15 * 60 * 1000, // 15 min
+  });
+
+  res.cookie("refreshToken", refreshToken, {
+    ...cookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+      },
+      "Login successful"
+    )
+  );
 });
 
 const getCurrentUserController = asyncHandler(async (req, res) => {
@@ -77,27 +82,26 @@ const getCurrentUserController = asyncHandler(async (req, res) => {
     )
   );
 });
+
 const refreshTokenController = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   const accessToken = await refreshAccessToken(refreshToken);
 
-  return res
-    .cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
-    })
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        { accessToken },
-        "Access token refreshed successfully"
-      )
-    );
+  res.cookie("accessToken", accessToken, {
+    ...cookieOptions,
+    maxAge: 15 * 60 * 1000,
+  });
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { accessToken },
+      "Access token refreshed successfully"
+    )
+  );
 });
+
 module.exports = {
   signupController,
   verifyOtpController,
