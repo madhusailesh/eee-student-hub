@@ -43,7 +43,7 @@ export default function ResourcePage({
       const { data } = await api.get("/resources", {
         params: {
           semester,
-          subject,
+        subjectCode: subject,
           type,
         },
       });
