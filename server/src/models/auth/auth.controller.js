@@ -46,7 +46,8 @@ const verifyOtpController = asyncHandler(async (req, res) => {
 
 const loginController = asyncHandler(async (req, res) => {
   const { user, accessToken, refreshToken } = await login(req.body);
-
+console.log("Access Token:", accessToken);
+console.log("Refresh Token:", refreshToken);
   res.cookie("accessToken", accessToken, {
     ...cookieOptions,
     maxAge: 15 * 60 * 1000, // 15 min

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/services/auth";
 import { motion } from "framer-motion";
+import { useAuth } from "@/providers/AuthProvider";
 import { 
   Mail, 
   Lock, 
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 
 export default function LoginForm() {
+  const { fetchUser } = useAuth();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -33,24 +35,29 @@ export default function LoginForm() {
 
     try {
       const res = await login({
-        email,
-        password,
-      });
+  email,
+  password,
+});
 
-      console.log(res);
+console.log("Login Response:", res);
+console.log("Response Data:", res.data);
 
-      const user = res.data;
+// Adjust according to your backend response
+const user = res.data.data || res.data.user || res.data;
 
-      // Save data to localStorage
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(user));
+localStorage.setItem("user", JSON.stringify(user));
 
-      // Redirect according to role
-      if (user.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/dashboard");
-      }
+if (res.data.token) {
+  localStorage.setItem("token", res.data.token);
+}
+
+await fetchUser();
+
+if (user?.role === "admin") {
+  router.replace("/admin");
+} else {
+  router.replace("/dashboard");
+}
     } catch (err) {
       console.error("Login Error:", err);
       setError(err.response?.data?.message || "Login failed. Please check your credentials.");
