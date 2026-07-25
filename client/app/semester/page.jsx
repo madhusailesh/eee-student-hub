@@ -33,6 +33,12 @@ const semesters = [
     year: "4th Year",
     status: "Specialization & Projects",
   },
+   {
+    id: 9,
+    title: "GATE",
+    year: "GRADUATE",
+    status: "Specialization & Projects",
+  },
 ];
 
 export default function SemesterPage() {

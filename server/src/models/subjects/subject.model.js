@@ -13,7 +13,7 @@ const subjectSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 1,
-      max: 8,
+      max: 9,
     },
 
     code: {

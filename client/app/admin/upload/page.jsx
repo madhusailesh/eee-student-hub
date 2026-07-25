@@ -178,7 +178,7 @@ export default function UploadPage() {
                   className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 p-3 text-sm font-semibold text-slate-900 shadow-sm backdrop-blur-md transition-all focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-950"
                 >
                   <option value="" className="dark:bg-slate-900">Select Semester</option>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8 ,9].map((sem) => (
                     <option key={sem} value={sem} className="dark:bg-slate-900">
                       Semester {sem}
                     </option>

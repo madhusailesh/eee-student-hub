@@ -522,4 +522,13 @@ module.exports = [
   type: "LAB",
   credits: 1.5,
 },
+{
+  branch: "EEE",
+  semester: 9,
+  code: "GATE",
+  name: "GATE Preparation",
+  type: "THEORY",
+  credits: 3,
+},
+
 ];
