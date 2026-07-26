@@ -10,6 +10,7 @@ const { uploadToR2, deleteFromR2 } = require("../../utils/uploadToR2");
 
 // Create Resource
 const create = async (req, res, next) => {
+   
   try {
     if (!req.file) {
       return res.status(400).json({

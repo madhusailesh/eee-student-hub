@@ -25,14 +25,14 @@ export default function TeamPage() {
       image: "/satyaprakash.png",  
       email: "satyaprakash551043@gmail.com",
     },
-    {
-      name: "Biswaranjan Mohapatra",
-      role: "Admin",
-      branch: "EEE Department (2024 - 2028)",
-      bio: "handling student queries, feedback, and ensuring smooth communication within the hub.",
-      image: "/biswa.png",  
-      email: "bishwaranjanmohapatra05@gmail.com",
-    },
+    // {
+    //   name: "Biswaranjan Mohapatra",
+    //   role: "Admin",
+    //   branch: "EEE Department (2024 - 2028)",
+    //   bio: "handling student queries, feedback, and ensuring smooth communication within the hub.",
+    //   image: "/biswa.png",  
+    //   email: "bishwaranjanmohapatra05@gmail.com",
+    // },
   ];
 
   return (

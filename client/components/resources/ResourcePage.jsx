@@ -36,27 +36,36 @@ export default function ResourcePage({
     setFilteredResources(filtered);
   }, [search, resources]);
 
-  const fetchResources = async () => {
-    try {
-      setLoading(true);
+ const fetchResources = async () => {
+  try {
+    setLoading(true);
 
-      const { data } = await api.get("/resources", {
-        params: {
-          semester,
+    console.log({
+      semester,
+      subject,
+      type,
+    });
+
+    const { data } = await api.get("/resources", {
+      params: {
+        semester,
         subjectCode: subject,
-          type,
-        },
-      });
+        type,
+      },
+    });
 
-      setResources(data.data || []);
-      setFilteredResources(data.data || []);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    console.log(data);
+console.log("semester =", semester);
+console.log("subject =", subject);
+console.log("type =", type);
+    setResources(data.data || []);
+    setFilteredResources(data.data || []);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="space-y-6 md:space-y-8">
       
