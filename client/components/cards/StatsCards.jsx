@@ -20,7 +20,7 @@ export default function StatsCards() {
     async function load() {
       try {
         const data = await getDashboard();
-        console.log("Dashboard Response:", data);
+        // console.log("Dashboard Response:", data);
         setStats(data.data?.statistics || {});
       } catch (err) {
         console.error("Failed to fetch dashboard stats:", err);

@@ -54,10 +54,10 @@ export default function ResourcePage({
       },
     });
 
-    console.log(data);
-console.log("semester =", semester);
-console.log("subject =", subject);
-console.log("type =", type);
+//     console.log(data);
+// console.log("semester =", semester);
+// console.log("subject =", subject);
+// console.log("type =", type);
     setResources(data.data || []);
     setFilteredResources(data.data || []);
   } catch (err) {

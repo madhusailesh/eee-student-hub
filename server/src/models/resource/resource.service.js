@@ -17,13 +17,13 @@ const getAllResources = async (filters) => {
   }
 
  if (filters.subjectCode) {
-  console.log("Requested Code:", filters.subjectCode);
+  // console.log("Requested Code:", filters.subjectCode);
 
   const subject = await Subject.findOne({
     code: filters.subjectCode.toUpperCase(),
   });
 
-  console.log("Subject Found:", subject);
+  // console.log("Subject Found:", subject);
 
   if (!subject) return [];
 
@@ -32,7 +32,7 @@ const getAllResources = async (filters) => {
   query.subject = subject._id;
 }
 
-console.log("Mongo Query:", query);
+// console.log("Mongo Query:", query);
 
 const resources = await Resource.find(query)
   .populate("subject", "name code semester")
@@ -42,11 +42,11 @@ const resources = await Resource.find(query)
  console.log("Database Name:", Resource.db.name);
  const all = await Resource.find();
 
-console.log("Total Resources:", all.length);
+// console.log("Total Resources:", all.length);
 
 const exp6 = all.find(r => r.title === "EXPERIMENT 6");
 
-console.log("EXPERIMENT 6:", exp6);
+// console.log("EXPERIMENT 6:", exp6);
 return resources;
 };
 const getResourceById = async (id) => {

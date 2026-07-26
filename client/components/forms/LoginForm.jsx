@@ -39,8 +39,8 @@ export default function LoginForm() {
   password,
 });
 
-console.log("Login Response:", res);
-console.log("Response Data:", res.data);
+// console.log("Login Response:", res);
+// console.log("Response Data:", res.data);
 
 // Adjust according to your backend response
 const user = res.data.data || res.data.user || res.data;

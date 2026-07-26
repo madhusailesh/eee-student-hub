@@ -58,7 +58,7 @@ const resources = [
 export default function SubjectDashboard() {
   const { semester, subjectCode } = useParams();
 
-  console.log(subjectCode); // ✅ yahan rakho
+  // console.log(subjectCode); // 
 
   // Animation variants for smooth staggered entry
   const containerVariants = {
