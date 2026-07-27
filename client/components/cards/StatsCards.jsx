@@ -13,64 +13,94 @@ import {
 } from "lucide-react";
 
 export default function StatsCards() {
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({
+    notes: 0,
+    pyqs: 0,
+    subjects: 0,
+    faculty: 0,
+    notices: 0,
+    timetables: 0,
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
+    let isMounted = true;
+
+    async function loadStats() {
       try {
-        const data = await getDashboard();
-        // console.log("Dashboard Response:", data);
-        setStats(data.data?.statistics || {});
+        const res = await getDashboard();
+        
+        // 🔴 FIX: Extracting stats safely regardless of Axios wrapper level
+        const fetchedStats = 
+          res?.data?.data?.statistics || 
+          res?.data?.statistics || 
+          res?.statistics || 
+          res?.data || 
+          {};
+
+        if (isMounted) {
+          setStats({
+            notes: fetchedStats.notes ?? fetchedStats.totalNotes ?? 0,
+            pyqs: fetchedStats.pyqs ?? fetchedStats.totalPyqs ?? 0,
+            subjects: fetchedStats.subjects ?? fetchedStats.totalSubjects ?? 0,
+            faculty: fetchedStats.faculty ?? fetchedStats.totalFaculty ?? 0,
+            notices: fetchedStats.notices ?? fetchedStats.totalNotices ?? 0,
+            timetables: fetchedStats.timetables ?? fetchedStats.totalTimetables ?? 0,
+          });
+        }
       } catch (err) {
-        console.error("Failed to fetch dashboard stats:", err);
+        console.error("❌ Dashboard stats fetch failed:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
-    load();
+    loadStats();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const statItems = [
     {
       title: "Notes",
-      value: stats?.notes ?? 0,
+      value: stats.notes,
       icon: FileText,
       color: "bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400",
       accent: "from-purple-500 to-indigo-500",
     },
     {
       title: "PYQs",
-      value: stats?.pyqs ?? 0,
+      value: stats.pyqs,
       icon: FileQuestion,
       color: "bg-cyan-500/10 text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400",
       accent: "from-cyan-500 to-blue-500",
     },
     {
       title: "Subjects",
-      value: stats?.subjects ?? 0,
+      value: stats.subjects,
       icon: BookOpen,
       color: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
       accent: "from-emerald-500 to-teal-500",
     },
     {
       title: "Faculty",
-      value: stats?.faculty ?? 0,
+      value: stats.faculty,
       icon: Users,
       color: "bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400",
       accent: "from-indigo-500 to-violet-500",
     },
     {
       title: "Notices",
-      value: stats?.notices ?? 0,
+      value: stats.notices,
       icon: Bell,
       color: "bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
       accent: "from-rose-500 to-pink-500",
     },
     {
       title: "Timetables",
-      value: stats?.timetables ?? 0,
+      value: stats.timetables,
       icon: Calendar,
       color: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
       accent: "from-amber-500 to-orange-500",
@@ -94,7 +124,7 @@ export default function StatsCards() {
             transition={{ duration: 0.3, delay: index * 0.04 }}
             className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white/80 p-4 shadow-sm backdrop-blur-md transition-all duration-200 hover:-translate-y-1 hover:border-cyan-500/40 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60 dark:hover:border-cyan-500/30 transform-gpu"
           >
-            {/* Soft Ambient Corner Light */}
+            {/* Ambient Corner Light */}
             <div className={`absolute -right-8 -top-8 h-20 w-20 rounded-full bg-gradient-to-br ${item.accent} opacity-10 blur-xl transition-opacity duration-300 group-hover:opacity-20`} />
 
             <div className="flex items-center justify-between gap-2">
@@ -119,7 +149,7 @@ export default function StatsCards() {
   );
 }
 
-{/* Smooth Skeleton while loading */}
+{/* Smooth Skeleton */}
 function StatsSkeleton() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 md:gap-4 my-8">

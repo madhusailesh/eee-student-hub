@@ -19,7 +19,7 @@ const signup = async (data) => {
     if (existingUser.isVerified) {
       throw new ApiError(409, "Email already exists and is verified");
     } else {
-      // 🔴 Agar pichla unverified user abhi tak delete nahi hua, toh purana record hata do
+      // 🔴 Agar pichla unverified user delete hone se pehle dobara try kar raha hai, toh use clear kar do
       await User.deleteOne({ _id: existingUser._id });
     }
   }
@@ -30,11 +30,10 @@ const signup = async (data) => {
     purpose: "verify-email",
   });
 
-  // Create user (unverifiedExpireAt will default to now & expire in 60s)
+  // Create user (createdAt ke basis par Partial TTL Index kaam karega)
   const user = await User.create({
     ...data,
     isVerified: false,
-    unverifiedExpireAt: new Date(),
   });
 
   // Generate OTP
@@ -71,12 +70,11 @@ const verifyOtp = async ({ email, otp }) => {
     throw new ApiError(400, "Invalid or expired OTP");
   }
 
-  // 🔴 CRITICAL FIX: isVerified ko true karo AUR unverifiedExpireAt ko $unset karo
+  // 🔴 isVerified: true hote hi Partial TTL Index filter cancel ho jayega
   const user = await User.findOneAndUpdate(
     { email },
     {
       $set: { isVerified: true },
-      $unset: { unverifiedExpireAt: 1 }, // 👈 Isse TTL index remove ho jayega aur document delete NAHI hoga
     },
     { new: true }
   );

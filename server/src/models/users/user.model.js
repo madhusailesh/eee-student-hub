@@ -45,16 +45,18 @@ const userSchema = new mongoose.Schema(
       default: null,
       select: false,
     },
-
-    // 🔴 AUTOMATIC 1-MINUTE TTL INDEX FOR UNVERIFIED USERS
-    unverifiedExpireAt: {
-      type: Date,
-      default: Date.now,
-      expires: 60, // 60 seconds = 1 minute (MongoDB automatically deletes after 1 min)
-    },
   },
   {
     timestamps: true,
+  }
+);
+
+// 🔴 BULLETPROOF FIX: TTL Index SIRF unverified users (isVerified: false) par chalega
+userSchema.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: 60, // 1 Minute
+    partialFilterExpression: { isVerified: false }, // 👈 SIRF TAB DELETE KAREGA JAB isVerified FALSE HO
   }
 );
 

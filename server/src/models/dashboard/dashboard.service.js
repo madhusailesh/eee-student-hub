@@ -1,5 +1,4 @@
-const Note = require("../notes/notes.model");
-const Pyq = require("../pyqs/pyq.model");
+const Resource = require("../resource/resource.model"); // 👈 Use Resource model instead of Note/Pyq
 const Subject = require("../subjects/subject.model");
 const Faculty = require("../faculty/faculty.model");
 const Notice = require("../notice/notice.model");
@@ -16,18 +15,21 @@ const getDashboard = async () => {
     latestNotices,
     latestNotes,
   ] = await Promise.all([
-    Note.countDocuments({ isActive: true }),
-    Pyq.countDocuments({ isActive: true }),
-    Subject.countDocuments({ isActive: true }),
-    Faculty.countDocuments({ isActive: true }),
-    Notice.countDocuments({ isActive: true }),
-    Timetable.countDocuments({ isActive: true }),
+    // 🔴 Count using Resource model with respective 'type'
+    Resource.countDocuments({ type: "notes" }),
+    Resource.countDocuments({ type: "pyqs" }),
+    Subject.countDocuments({}),
+    Faculty.countDocuments({}),
+    Notice.countDocuments({}),
+    Timetable.countDocuments({}),
 
-    Notice.find({ isActive: true })
+    // Latest Notices
+    Notice.find({})
       .sort({ createdAt: -1 })
       .limit(5),
 
-    Note.find({ isActive: true })
+    // 🔴 Fetch latest notes from Resource collection where type is 'notes'
+    Resource.find({ type: "notes" })
       .populate("subject", "name code")
       .sort({ createdAt: -1 })
       .limit(5),

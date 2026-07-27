@@ -52,7 +52,7 @@ const sendOtpEmail = async (toEmail, otp) => {
   <!-- Timer Notification -->
   <div style="text-align: center; background-color: #f8fafc; border-radius: 12px; padding: 12px; margin-top: 24px;">
     <p style="font-size: 12px; color: #64748b; margin: 0; display: inline-flex; align-items: center;">
-      ⏳ This OTP is valid for <strong style="color: #0f172a; margin-left: 4px;">10 minutes</strong>.
+      ⏳ This OTP is valid for <strong style="color: #0f172a; margin-left: 4px;">1 minutes</strong>.
     </p>
   </div>
 
