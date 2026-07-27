@@ -9,7 +9,7 @@ const {
   refreshAccessToken,
 } = require("./auth.service");
 
-// Shared Cookie Options
+// Shared Cookie Options for Cross-Domain Deployment
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
@@ -46,16 +46,16 @@ const verifyOtpController = asyncHandler(async (req, res) => {
 
 const loginController = asyncHandler(async (req, res) => {
   const { user, accessToken, refreshToken } = await login(req.body);
-console.log("Access Token:", accessToken);
-console.log("Refresh Token:", refreshToken);
+
+  // Set cookies
   res.cookie("accessToken", accessToken, {
     ...cookieOptions,
-    maxAge: 15 * 60 * 1000, // 15 min
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days matching token expiry
   });
 
   res.cookie("refreshToken", refreshToken, {
     ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 
   return res.status(200).json(
@@ -66,6 +66,8 @@ console.log("Refresh Token:", refreshToken);
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        token: accessToken, // 👈 CRITICAL FIX: Required for localStorage & Bearer Auth Header
+        accessToken: accessToken,
       },
       "Login successful"
     )
@@ -85,19 +87,22 @@ const getCurrentUserController = asyncHandler(async (req, res) => {
 });
 
 const refreshTokenController = asyncHandler(async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
   const accessToken = await refreshAccessToken(refreshToken);
 
   res.cookie("accessToken", accessToken, {
     ...cookieOptions,
-    maxAge: 15 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   return res.status(200).json(
     new ApiResponse(
       200,
-      { accessToken },
+      { 
+        token: accessToken,
+        accessToken 
+      },
       "Access token refreshed successfully"
     )
   );
