@@ -28,7 +28,7 @@ const sendOtpEmail = async (toEmail, otp) => {
   <!-- Header / Badge -->
   <div style="text-align: center; margin-bottom: 24px;">
     <span style="display: inline-block; background-color: #ecfeff; color: #0891b2; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 1px; border: 1px solid #cffafbe0;">
-      ⚡ EEE Student Hub
+      ⚡ CORE EEE
     </span>
   </div>
 
