@@ -1,24 +1,35 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api",
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
-// Request Interceptor
+// 1. Request Interceptor: LocalStorage se token utha ke Bearer Header lagao
 api.interceptors.request.use(
-  (config) => config,
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor
+// 2. Response Interceptor: 401 aane par Token Refresh karo
 api.interceptors.response.use(
   (response) => response,
 
   async (error) => {
     const originalRequest = error.config;
 
-    // Login / Me / Refresh requests ko retry mat karo
+    // Auth endpoints ko retry loop me na bhejo
     if (
       originalRequest?.url?.includes("/auth/login") ||
       originalRequest?.url?.includes("/auth/me") ||
@@ -31,16 +42,29 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Backend refreshToken cookie read karega
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/auth/refresh-token`,
+        // Refresh token call
+        const response = await axios.post(
+          `${API_BASE_URL}/auth/refresh-token`,
           {},
           { withCredentials: true }
         );
 
-        // Naya accessToken cookie me aa chuka hoga
+        // Naya token localStorage me save karo
+        const newToken =
+          response.data?.data?.token || response.data?.data?.accessToken;
+
+        if (newToken) {
+          localStorage.setItem("token", newToken);
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        }
+
         return api(originalRequest);
       } catch (err) {
+        // Refresh fail ho toh user logout kardo
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("token");
+          localStorage.getItem("user") && localStorage.removeItem("user");
+        }
         return Promise.reject(err);
       }
     }
