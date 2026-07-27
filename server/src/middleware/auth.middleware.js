@@ -6,38 +6,44 @@ const protect = async (req, res, next) => {
   try {
     let token;
 
-    // Authorization Header
+    // 1. Check Authorization Header (Bearer Token)
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer ")
+      req.headers.authorization.startsWith("Bearer")
     ) {
-      token = req.headers.authorization.split(" ")[1];
+      token = req.headers.authorization.split(" ")[1]?.trim();
     }
 
-    // Cookie
+    // 2. Fallback to Cookie Token if header is not present
     if (!token && req.cookies?.accessToken) {
-      token = req.cookies.accessToken;
+      token = req.cookies.accessToken.trim();
     }
 
-    // No token found
+    // No token found in both places
     if (!token) {
-      return next(new ApiError(401, "Unauthorized"));
+      return next(new ApiError(401, "Unauthorized - Access Token Missing"));
     }
 
     // Verify JWT
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
+    // Support both payload keys: decoded.id OR decoded._id
+    const userId = decoded.id || decoded._id;
+
+    if (!userId) {
+      return next(new ApiError(401, "Invalid token structure"));
+    }
+
     // Find User
-    const user = await User.findById(decoded.id).select(
+    const user = await User.findById(userId).select(
       "-password -refreshToken"
     );
 
     if (!user) {
-      return next(new ApiError(401, "User not found"));
+      return next(new ApiError(401, "User no longer exists"));
     }
 
     req.user = user;
-
     next();
   } catch (error) {
     if (

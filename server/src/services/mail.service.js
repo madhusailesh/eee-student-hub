@@ -1,19 +1,22 @@
 const nodemailer = require("nodemailer");
 
+// Dynamic SSL Check for Port 465
+const smtpPort = Number(process.env.SMTP_PORT) || 465;
+
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || "smtp-relay.brevo.com",
-  port: Number(process.env.SMTP_PORT) || 2525,
-  secure: false,
+  port: smtpPort,
+  secure: smtpPort === 465, // Port 465 ke liye true, 2525/587 ke liye false
   auth: {
-    user: process.env.SMTP_USER?.trim(),
-    pass: process.env.SMTP_PASS?.trim(),
+    user: process.env.SMTP_USER ? process.env.SMTP_USER.trim() : "",
+    pass: process.env.SMTP_PASS ? process.env.SMTP_PASS.trim() : "",
   },
+  connectionTimeout: 15000, // 15 seconds max timeout
 });
 
 const sendOtpEmail = async (toEmail, otp) => {
   try {
     const mailOptions = {
-      // Must exactly match the verified sender in Brevo
       from: `"CORE EEE" <madhusaileshsasamal998@gmail.com>`,
       to: toEmail,
       subject: "Verification OTP - EEE Student Hub",
