@@ -1,5 +1,6 @@
 const asyncHandler = require("../../utils/asyncHandler");
 const ApiResponse = require("../../utils/ApiResponse");
+const User = require("../users/user.model");
 
 const {
   signup,
@@ -66,12 +67,33 @@ const loginController = asyncHandler(async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
-        token: accessToken, // 👈 CRITICAL FIX: Required for localStorage & Bearer Auth Header
+        token: accessToken, // Required for localStorage & Bearer Auth Header
         accessToken: accessToken,
       },
       "Login successful"
     )
   );
+});
+
+// 🔴 ADDED: Logout Controller
+const logoutController = asyncHandler(async (req, res) => {
+  // Clear refreshToken in database if user is authenticated via protect middleware
+  if (req.user?._id) {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $unset: { refreshToken: 1 }, // Remove refreshToken from DB
+      },
+      { new: true }
+    );
+  }
+
+  // Clear Cookies from Browser
+  return res
+    .status(200)
+    .clearCookie("accessToken", cookieOptions)
+    .clearCookie("refreshToken", cookieOptions)
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
 const getCurrentUserController = asyncHandler(async (req, res) => {
@@ -112,6 +134,7 @@ module.exports = {
   signupController,
   verifyOtpController,
   loginController,
+  logoutController, // 👈 Exporting logout controller
   getCurrentUserController,
   refreshTokenController,
 };

@@ -6,13 +6,16 @@ const validate = require("../../middleware/validate.middleware");
 const protect = require("../../middleware/auth.middleware");
 
 const {
-  signupSchema,  verifyOtpSchema,
+  signupSchema,
+  verifyOtpSchema,
   loginSchema,
 } = require("./auth.validation"); 
+
 const {
   signupController,
   verifyOtpController,
   loginController,
+  logoutController, // 👈 Added logout controller
   getCurrentUserController,
   refreshTokenController,
 } = require("./auth.controller");
@@ -22,18 +25,26 @@ router.post(
   validate(signupSchema),
   signupController
 );
+
 router.post(
   "/verify-otp",
   validate(verifyOtpSchema),
   verifyOtpController
 );
- 
 
 router.post(
   "/login",
   validate(loginSchema),
   loginController
 );
+
+// 🔴 ADDED: Logout Route
+router.post(
+  "/logout",
+  protect, // Token verify karke DB me refreshToken remove karega
+  logoutController
+);
+
 router.get(
   "/me",
   protect,
@@ -44,4 +55,5 @@ router.post(
   "/refresh-token",
   refreshTokenController
 );
+
 module.exports = router;

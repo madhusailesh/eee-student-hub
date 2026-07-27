@@ -8,19 +8,20 @@ import {
   Sun,
   Moon,
   LogIn,
+  LogOut,
   User,
   Menu,
   X,
   Zap,
   BookOpen,
   Users,
-  BellRing,
+  ShieldCheck,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth(); // Assuming logout function is available in AuthProvider
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,14 +34,15 @@ export default function Navbar() {
   const navLinks = [
     { name: "Semesters", href: "/semester", icon: BookOpen },
     { name: "Faculty", href: "/faculty", icon: Users },
-    // { name: "Notices", href: "/notices", icon: BellRing },
   ];
 
   const isDark = theme === "dark";
+  const isAdmin = user?.role === "admin"; // Check if user has admin role
 
   return (
     <header className="sticky top-0 z-50 w-full px-3 py-3 md:px-6">
       <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between rounded-2xl border border-slate-200/80 bg-white/80 px-4 backdrop-blur-xl shadow-lg shadow-slate-200/20 transition-all duration-300 dark:border-slate-800/80 dark:bg-slate-900/80 dark:shadow-cyan-950/20">
+        
         {/* Brand Logo */}
         <Link href="/" className="group flex items-center gap-2.5">
           <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-500 to-violet-500 text-white shadow-md shadow-cyan-500/20 transition-transform duration-300 group-hover:scale-105">
@@ -48,7 +50,7 @@ export default function Navbar() {
           </div>
           <div className="flex flex-col">
             <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-              CORE
+              CORE{" "}
               <span className="bg-gradient-to-r from-cyan-500 to-indigo-500 bg-clip-text text-transparent">
                 EEE
               </span>
@@ -85,7 +87,7 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right Section: Theme Toggle + Login / Profile */}
+        {/* Right Section: Theme Toggle + Admin Button + Auth Control */}
         <div className="flex items-center gap-2.5">
           {/* Smooth Sliding Theme Toggle */}
           {mounted ? (
@@ -113,25 +115,46 @@ export default function Navbar() {
             <div className="h-8 w-14 rounded-full bg-slate-200 dark:bg-slate-800/50" />
           )}
 
-          {/* User Auth Button */}
+          {/* Admin Control Button (Desktop) - Only Visible to Admin Users */}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="hidden items-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-bold text-amber-600 transition-all hover:bg-amber-500/20 dark:text-amber-400 md:flex"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>Admin</span>
+            </Link>
+          )}
+
+          {/* User Profile & Logout (Desktop) */}
           {user ? (
-            <div className="flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400">
-              <User className="h-4 w-4" />
-              <span className="max-w-[90px] truncate">
-                {user.fullName || user.name}
-              </span>
+            <div className="hidden items-center gap-2 md:flex">
+              <div className="flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400">
+                <User className="h-4 w-4" />
+                <span className="max-w-[100px] truncate">
+                  {user.fullName || user.name}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center justify-center rounded-xl border border-rose-500/30 bg-rose-500/10 p-2 text-rose-600 transition-colors hover:bg-rose-500/20 dark:text-rose-400"
+                title="Logout"
+                aria-label="Logout"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
             </div>
           ) : (
             <Link
               href="/login"
-              className="flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 py-1.5 text-xs font-bold text-white"
+              className="hidden items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 py-1.5 text-xs font-bold text-white shadow-md shadow-cyan-500/20 transition-transform active:scale-95 md:flex"
             >
               <LogIn className="h-3.5 w-3.5" />
               <span>Login</span>
             </Link>
           )}
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 md:hidden"
@@ -146,7 +169,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Dropdown Popup */}
+      {/* Mobile Dropdown Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -156,7 +179,8 @@ export default function Navbar() {
             transition={{ duration: 0.2 }}
             className="mx-auto mt-2 max-w-7xl rounded-2xl border border-slate-200/80 bg-white/95 p-3 shadow-xl backdrop-blur-2xl dark:border-slate-800 dark:bg-slate-900/95 md:hidden"
           >
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5">
+              {/* Main Nav Links */}
               {navLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive = pathname.startsWith(link.href);
@@ -176,6 +200,49 @@ export default function Navbar() {
                   </Link>
                 );
               })}
+
+              {/* Admin Portal Button (Mobile) */}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3.5 py-2.5 text-xs font-bold text-amber-600 dark:text-amber-400"
+                >
+                  <ShieldCheck className="h-4 w-4" />
+                  <span>Admin Panel</span>
+                </Link>
+              )}
+
+              <hr className="my-1 border-slate-200 dark:border-slate-800" />
+
+              {/* User Details & Login/Logout (Mobile) */}
+              {user ? (
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center gap-2.5 rounded-xl bg-slate-100 px-3.5 py-2 text-xs font-bold text-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
+                    <User className="h-4 w-4 text-cyan-500" />
+                    <span className="truncate">{user.fullName || user.name}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logout();
+                    }}
+                    className="flex items-center gap-3 rounded-xl bg-rose-500/10 px-3.5 py-2.5 text-xs font-bold text-rose-600 dark:text-rose-400"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-cyan-500/20"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
