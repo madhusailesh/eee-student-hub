@@ -1,10 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { FileText, Eye, Download, Calendar } from "lucide-react";
+import { FileText, Eye, Download, Calendar, User } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ResourceCard({ resource, index = 0 }) {
+  // Extract uploader name with support for name, fullName, username, or fallback
+  const uploaderName =
+    typeof resource?.uploadedBy === "object"
+      ? resource.uploadedBy?.name ||
+        resource.uploadedBy?.fullName ||
+        resource.uploadedBy?.username ||
+        "Admin"
+      : typeof resource?.uploadedBy === "string" && resource.uploadedBy.length < 20
+        ? resource.uploadedBy
+        : "Admin";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -33,9 +44,19 @@ export default function ResourceCard({ resource, index = 0 }) {
               </p>
             )}
 
-            <div className="mt-3 flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 dark:text-slate-500">
-              <Calendar size={13} className="text-cyan-500" />
-              <span>{new Date(resource.createdAt).toLocaleDateString()}</span>
+            {/* Uploaded By & Date Meta Section */}
+            <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+              <div className="flex items-center gap-1">
+                <User size={13} className="text-cyan-500" />
+                <span>
+                  Uploaded By <strong className="text-slate-600 dark:text-slate-300">{uploaderName}</strong>
+                </span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1">
+                <Calendar size={13} className="text-cyan-500" />
+                <span>{new Date(resource.createdAt).toLocaleDateString()}</span>
+              </div>
             </div>
           </div>
         </div>
