@@ -26,12 +26,12 @@ const userSchema = new mongoose.Schema(
     semester: {
       type: Number,
       required: true,
-      enum: [1,2,3,4,5,6,7,8],
+      enum: [1, 2, 3, 4, 5, 6, 7, 8],
     },
 
     role: {
       type: String,
-      enum: ["student","admin"],
+      enum: ["student", "admin"],
       default: "student",
     },
 
@@ -45,6 +45,13 @@ const userSchema = new mongoose.Schema(
       default: null,
       select: false,
     },
+
+    // 🔴 AUTOMATIC 1-MINUTE TTL INDEX FOR UNVERIFIED USERS
+    unverifiedExpireAt: {
+      type: Date,
+      default: Date.now,
+      expires: 60, // 60 seconds = 1 minute (MongoDB automatically deletes after 1 min)
+    },
   },
   {
     timestamps: true,
@@ -57,6 +64,7 @@ userSchema.pre("save", async function () {
 
   this.password = await bcrypt.hash(this.password, 12);
 });
+
 // Compare password
 userSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password);

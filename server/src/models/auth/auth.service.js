@@ -1,27 +1,41 @@
 const User = require("../users/user.model");
 const Otp = require("./otp.model");
-
 const ApiError = require("../../utils/ApiError");
+const bcrypt = require("bcryptjs");
 
 const { generateOtp, getOtpExpiry } = require("../../services/otp.service");
 const { sendOtpEmail } = require("../../services/mail.service");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  verifyRefreshToken,
+} = require("../../services/jwt.service");
 
 const signup = async (data) => {
-  // Check if email already exists
-  const existingUser = await User.exists({ email: data.email });
+  // Check if user with email already exists
+  const existingUser = await User.findOne({ email: data.email });
 
   if (existingUser) {
-    throw new ApiError(409, "Email already exists");
+    if (existingUser.isVerified) {
+      throw new ApiError(409, "Email already exists and is verified");
+    } else {
+      // 🔴 Agar pichla unverified user abhi tak delete nahi hua, toh purana record hata do
+      await User.deleteOne({ _id: existingUser._id });
+    }
   }
 
-  // Remove any old verification OTPs
+  // Remove any old verification OTPs for this email
   await Otp.deleteMany({
     email: data.email,
     purpose: "verify-email",
   });
 
-  // Create user (password will be hashed by pre('save'))
-  const user = await User.create(data);
+  // Create user (unverifiedExpireAt will default to now & expire in 60s)
+  const user = await User.create({
+    ...data,
+    isVerified: false,
+    unverifiedExpireAt: new Date(),
+  });
 
   // Generate OTP
   const otp = generateOtp();
@@ -42,10 +56,11 @@ const signup = async (data) => {
     email: user.email,
   };
 };
-//veryfy otp
+
+// Verify OTP
 const verifyOtp = async ({ email, otp }) => {
-  console.log("Email:", email);
-  console.log("OTP:", otp);
+  console.log("Verifying Email:", email);
+
   const otpDoc = await Otp.findOne({
     email,
     otp,
@@ -56,12 +71,19 @@ const verifyOtp = async ({ email, otp }) => {
     throw new ApiError(400, "Invalid or expired OTP");
   }
 
-  await User.updateOne(
+  // 🔴 CRITICAL FIX: isVerified ko true karo AUR unverifiedExpireAt ko $unset karo
+  const user = await User.findOneAndUpdate(
     { email },
     {
-      isVerified: true,
-    }
+      $set: { isVerified: true },
+      $unset: { unverifiedExpireAt: 1 }, // 👈 Isse TTL index remove ho jayega aur document delete NAHI hoga
+    },
+    { new: true }
   );
+
+  if (!user) {
+    throw new ApiError(400, "User account expired or not found");
+  }
 
   await Otp.deleteMany({
     email,
@@ -69,17 +91,9 @@ const verifyOtp = async ({ email, otp }) => {
   });
 
   return {
-    email,
+    email: user.email,
   };
 };
-
-
-const bcrypt = require("bcryptjs");
-const {
-  generateAccessToken,
-  generateRefreshToken,
-  verifyRefreshToken,
-} = require("../../services/jwt.service");
 
 const login = async ({ email, password }) => {
   const user = await User.findOne({ email }).select("+password +refreshToken");
@@ -111,7 +125,6 @@ const login = async ({ email, password }) => {
   };
 };
 
-
 const getCurrentUser = async (userId) => {
   const user = await User.findById(userId).select("-password -refreshToken");
 
@@ -121,6 +134,7 @@ const getCurrentUser = async (userId) => {
 
   return user;
 };
+
 const refreshAccessToken = async (refreshToken) => {
   if (!refreshToken) {
     throw new ApiError(401, "Refresh token missing");
@@ -140,6 +154,7 @@ const refreshAccessToken = async (refreshToken) => {
 
   return generateAccessToken(user);
 };
+
 module.exports = {
   signup,
   verifyOtp,
