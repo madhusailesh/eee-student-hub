@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { login } from "@/services/auth";
 import { motion } from "framer-motion";
 import { useAuth } from "@/providers/AuthProvider";
@@ -35,32 +36,40 @@ export default function LoginForm() {
 
     try {
       const res = await login({
-  email,
-  password,
-});
+        email,
+        password,
+      });
 
-// console.log("Login Response:", res);
-// console.log("Response Data:", res.data);
+      // Backend returns ApiResponse: { statusCode, data: { id, fullName, email, role, token, accessToken }, message }
+      const responseData = res?.data || res;
+      const token = responseData?.token || responseData?.accessToken;
 
-// Adjust according to your backend response
-const user = res.data.data || res.data.user || res.data;
+      if (token) {
+        localStorage.setItem("token", token);
+      }
 
-localStorage.setItem("user", JSON.stringify(user));
+      if (responseData) {
+        localStorage.setItem("user", JSON.stringify(responseData));
+      }
 
-if (res.data.token) {
-  localStorage.setItem("token", res.data.token);
-}
+      // Re-fetch authenticated user state in AuthProvider
+      if (fetchUser) {
+        await fetchUser();
+      }
 
-await fetchUser();
-
-if (user?.role === "admin") {
-  router.replace("/admin");
-} else {
-  router.replace("/dashboard");
-}
+      // Redirect based on user role
+      if (responseData?.role === "admin") {
+        router.replace("/admin");
+      } else {
+        router.replace("/semester");
+      }
     } catch (err) {
       console.error("Login Error:", err);
-      setError(err.response?.data?.message || "Login failed. Please check your credentials.");
+      setError(
+        err.response?.data?.message || 
+        err.message || 
+        "Login failed. Please check your credentials."
+      );
     } finally {
       setLoading(false);
     }
@@ -125,9 +134,11 @@ if (user?.role === "admin") {
 
         {/* Password Input */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
-            Password
-          </label>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300">
+              Password
+            </label>
+          </div>
           <div className="relative">
             <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400 dark:text-slate-500" />
             <input
@@ -165,12 +176,22 @@ if (user?.role === "admin") {
           ) : (
             <>
               <LogIn className="h-4 w-4" />
-              <span>Login to Dashboard</span>
+              <span>Login to Account</span>
             </>
           )}
         </button>
-
       </form>
+
+      {/* Footer Navigation Link to Signup */}
+      <div className="mt-6 text-center text-xs font-semibold text-slate-500 dark:text-slate-400 relative z-10">
+        Don&apos;t have an account?{" "}
+        <Link
+          href="/signup"
+          className="font-bold text-cyan-600 hover:underline dark:text-cyan-400"
+        >
+          Create One
+        </Link>
+      </div>
     </motion.div>
   );
 }
