@@ -13,10 +13,13 @@ import {
   Layers,
   Tag,
   AlignLeft,
-  FileCheck
+  FileCheck,
+  AlertCircle,
+  RotateCcw,
+  Sparkles
 } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { getSubjectsBySemester } from "@/services/subjects";
 import { uploadResource } from "@/services/resources";
@@ -37,6 +40,10 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Animation States ('idle' | 'success' | 'error')
+  const [status, setStatus] = useState("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!semester) {
@@ -110,15 +117,25 @@ export default function UploadPage() {
 
       await uploadResource(formData);
 
-      toast.success("Resource uploaded successfully! 🎉");
-      resetForm();
+      // Trigger Success Animation Modal
+      setStatus("success");
     } catch (err) {
-      toast.error(
-        err?.response?.data?.message || "Upload failed. Please try again."
-      );
+      const msg = err?.response?.data?.message || "Upload failed. Please check your network or file size and try again.";
+      setErrorMessage(msg);
+      // Trigger Error Animation Modal
+      setStatus("error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const closeSuccessModal = () => {
+    setStatus("idle");
+    resetForm();
+  };
+
+  const closeErrorModal = () => {
+    setStatus("idle");
   };
 
   return (
@@ -178,7 +195,7 @@ export default function UploadPage() {
                   className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 p-3 text-sm font-semibold text-slate-900 shadow-sm backdrop-blur-md transition-all focus:border-cyan-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-slate-100 dark:focus:border-cyan-500 dark:focus:bg-slate-950"
                 >
                   <option value="" className="dark:bg-slate-900">Select Semester</option>
-                  {[1, 2, 3, 4, 5, 6, 7, 8 ,9].map((sem) => (
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((sem) => (
                     <option key={sem} value={sem} className="dark:bg-slate-900">
                       Semester {sem}
                     </option>
@@ -364,6 +381,156 @@ export default function UploadPage() {
         </motion.div>
 
       </div>
+
+      {/* ================= SUCCESS / ERROR ANIMATION MODAL ================= */}
+      <AnimatePresence>
+        {status !== "idle" && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-950/60 backdrop-blur-md">
+            
+            {/* Backdrop Motion */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={status === "success" ? closeSuccessModal : closeErrorModal}
+              className="absolute inset-0"
+            />
+
+            {/* Modal Card Content */}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              className="relative z-10 w-full max-w-md overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 p-8 text-center shadow-2xl dark:border-slate-800 dark:bg-slate-900/95 backdrop-blur-2xl"
+            >
+              
+              {/* SUCCESS STATE ANIMATION */}
+              {status === "success" && (
+                <div className="flex flex-col items-center">
+                  
+                  {/* Glowing Ring Animation */}
+                  <div className="relative mb-6 flex items-center justify-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: [0, 1.3, 1] }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="absolute h-24 w-24 rounded-full bg-emerald-500/20 dark:bg-emerald-500/30 blur-md"
+                    />
+                    <motion.div
+                      initial={{ scale: 0, rotate: -45 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 12, delay: 0.1 }}
+                      className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-white shadow-lg shadow-emerald-500/30"
+                    >
+                      <CheckCircle2 className="h-10 w-10 stroke-[2.5]" />
+                    </motion.div>
+                  </div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <div className="flex items-center justify-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1">
+                      <Sparkles className="h-4 w-4" />
+                      <span>Success</span>
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-slate-100">
+                      Resource Published!
+                    </h3>
+                    <p className="mt-2 text-xs font-medium text-slate-600 dark:text-slate-300">
+                      Your document has been successfully uploaded and is now live for students to view.
+                    </p>
+                  </motion.div>
+
+                  {/* Actions */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-8 flex w-full flex-col gap-3"
+                  >
+                    <button
+                      onClick={closeSuccessModal}
+                      className="w-full rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-transform active:scale-[0.98]"
+                    >
+                      Upload Another Resource
+                    </button>
+                    <Link
+                      href="/admin"
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-100 py-3 text-sm font-bold text-slate-700 transition-colors hover:bg-slate-200 dark:border-slate-800 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-slate-800"
+                    >
+                      Return to Dashboard
+                    </Link>
+                  </motion.div>
+
+                </div>
+              )}
+
+              {/* FAILURE STATE ANIMATION */}
+              {status === "error" && (
+                <div className="flex flex-col items-center">
+                  
+                  {/* Error Pulse Icon Animation */}
+                  <div className="relative mb-6 flex items-center justify-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: [0, 1.3, 1] }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute h-24 w-24 rounded-full bg-rose-500/20 dark:bg-rose-500/30 blur-md"
+                    />
+                    <motion.div
+                      initial={{ scale: 0, x: [0, -8, 8, -5, 5, 0] }}
+                      animate={{ scale: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: 0.1 }}
+                      className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-rose-600 to-red-500 text-white shadow-lg shadow-rose-500/30"
+                    >
+                      <AlertCircle className="h-10 w-10 stroke-[2.5]" />
+                    </motion.div>
+                  </div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
+                    <div className="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-1">
+                      Upload Failed
+                    </div>
+                    <h3 className="text-2xl font-black text-slate-900 dark:text-slate-100">
+                      Something went wrong
+                    </h3>
+                    <p className="mt-2 text-xs font-medium text-rose-600/90 dark:text-rose-400/90 bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
+                      {errorMessage}
+                    </p>
+                  </motion.div>
+
+                  {/* Actions */}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-8 flex w-full flex-col gap-3"
+                  >
+                    <button
+                      onClick={closeErrorModal}
+                      className="flex items-center justify-center gap-2 w-full rounded-2xl bg-slate-900 py-3 text-sm font-bold text-white shadow-md transition-transform active:scale-[0.98] dark:bg-slate-100 dark:text-slate-900"
+                    >
+                      <RotateCcw className="h-4 w-4" />
+                      <span>Try Again</span>
+                    </button>
+                  </motion.div>
+
+                </div>
+              )}
+
+            </motion.div>
+
+          </div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }
