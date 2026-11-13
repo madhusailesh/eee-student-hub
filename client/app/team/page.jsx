@@ -17,14 +17,14 @@ export default function TeamPage() {
   };
 
   const admins = [
-    // {
-    //   name: "Satyaprakash Mishra",
-    //   role: "Admin",
-    //   branch: "EEE Department (2024 - 2028)",
-    //   bio: "Overseeing course material uploads, PYQs, and student announcements.",
-    //   image: "/satyaprakash.png",  
-    //   email: "satyaprakash551043@gmail.com",
-    // },
+    {
+      name: "Shankar Mohanta",
+      role: "Admin",
+      branch: "EEE (2024 - 2028)",
+      bio: "Overseeing course material uploads, PYQs, and student announcements.",
+      // image: "/satyaprakash.png",  
+      email: "shankarmohanta99@gmail.com",
+    },
     
   ];
 
