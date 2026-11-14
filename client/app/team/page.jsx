@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'Our Team | CORE EEE Hub',
+  title: 'Our Team | CORE EEE',
   description: 'Meet the developer and administrators behind CORE EEE Student Hub.',
 };
 
@@ -22,7 +22,7 @@ export default function TeamPage() {
       role: "Admin",
       branch: "EEE (2024 - 2028)",
       bio: "Overseeing course material uploads, PYQs, and student announcements.",
-      // image: "/satyaprakash.png",  
+      image: "/shankar.png",  
       email: "shankarmohanta99@gmail.com",
     },
      {
